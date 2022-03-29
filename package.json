@@ -7,13 +7,27 @@
   "repository": "",
   "main": "src/index.js",
   "scripts": {
+    "prestart": "rm -rf .cache",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html"
+    "start:protected": "npm run prestart && parcel index.html",
+    "prebuild": "rm -rf dist",
+    "build": "parcel build src/index.html",
+    "build:protected": "npm run prebuild && parcel build index.html --no-source-maps --no-content-hash",
+    "reinstall": "rm yarn.lock && rm -rf node_modules/@rackai && yarn"
   },
   "dependencies": {
-    "@rackai/domql": "^1.0.8"
+    "@emotion/css": "^11.5.0",
+    "domql": "latest"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.3"
+    "@babel/core": "^7.11.5",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.1.0",
+    "parcel-bundler": "^1.12.3",
+    "parcel-plugin-svg-sprite": "^1.4.1",
+    "standard": "^13.1.0"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }
