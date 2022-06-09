@@ -1,6 +1,6 @@
 'use strict'
 
-import { set } from 'smbls'
+import { set } from '@symbo.ls/scratch'
 
 set({
   color: { indigo: '#118076' }

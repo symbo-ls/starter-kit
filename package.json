@@ -7,12 +7,18 @@
   "repository": "",
   "main": "src/index.js",
   "scripts": {
+    "prestart": "rm -rf .cache",
     "start": "parcel src/index.html",
-    "build": "parcel build src/index.html"
+    "start:protected": "npm run prestart && parcel index.html",
+    "prebuild": "rm -rf dist",
+    "build": "parcel build src/index.html",
+    "build:protected": "npm run prebuild && parcel build index.html --no-source-maps --no-content-hash",
+    "reinstall": "rm yarn.lock && rm -rf node_modules/@rackai && yarn"
   },
   "dependencies": {
-    "@domql/transform-emotion": "^2.0.7",
-    "domql": "^2.1.2"
+    "smbls": "latest",
+    "@domql/transform-emotion": "latest",
+    "domql": "latest"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
