@@ -2,12 +2,17 @@
 
 import style from './style'
 
-import 'domql/packages/emotion'
-import router from 'domql/packages/router'
+// import '@symbo.ls/scratch-init'
+import '@domql/emotion'
+import router from '@domql/router'
+
+import { Box } from '@symbo.ls/box'
 
 const App = {
   key: 'app',
+  proto: Box,
   style,
+  props: { fontSize: 'C' },
 
   state: {},
 
