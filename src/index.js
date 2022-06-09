@@ -1,18 +1,15 @@
 'use strict'
 
-import DOM from '@rackai/domql'
-var { performance } = window
+import './config'
 
-var start = performance.now()
-var dom = DOM.create({
-  style: {
-    fontFamily: '"Helvetica", "Arial", --system-default'
-  },
-  icon: '✅',
-  strong: 'domql',
-  text: ` render in `,
-  time: '',
-  milliseconds: ' milliseconds'
+import DOM from 'domql'
+import App from './app'
+import { transformEmotion } from '@domql/transform-emotion'
+
+const app = DOM.create(App, null, null, {
+  transform: {
+    transformEmotion
+  }
 })
 
-dom.update({ time: `${performance.now() - start}` })
+console.log(app)

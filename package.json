@@ -1,5 +1,5 @@
 {
-  "name": "domql-example",
+  "name": "@symbo.ls/starter-kit",
   "description": "",
   "private": true,
   "author": "",
@@ -11,9 +11,19 @@
     "build": "parcel build src/index.html"
   },
   "dependencies": {
-    "@rackai/domql": "^1.0.8"
+    "@domql/transform-emotion": "^2.0.7",
+    "domql": "^2.1.2"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.12.3"
+    "@babel/core": "^7.16.0",
+    "@babel/eslint-parser": "^7.16.3",
+    "@babel/preset-env": "^7.16.4",
+    "@parcel/babel-preset-env": "^2.0.1",
+    "eslint": "^8.4.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "parcel": "^2.0.1",
+    "standard": "^16.0.1"
   }
 }
