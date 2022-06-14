@@ -17,7 +17,7 @@ export default {
 
   button: {
     extends: Box,
-    props: { color: 'indigo' },
+    props: { color: 'indigo', width: 'B', fontSize: 'B' },
     text: 'asd'
   }
 }

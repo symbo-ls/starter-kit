@@ -12,4 +12,4 @@ const app = DOM.create(App, null, null, {
   }
 })
 
-console.log(app)
+console.log(app.button.ref.class)
