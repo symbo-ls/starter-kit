@@ -7,7 +7,7 @@
   "repository": "",
   "main": "src/index.js",
   "scripts": {
-    "prestart": "rm -rf .cache",
+    "prestart": "rm -rf .parcel-cache",
     "start": "parcel src/index.html",
     "start:protected": "npm run prestart && parcel index.html",
     "prebuild": "rm -rf dist",
