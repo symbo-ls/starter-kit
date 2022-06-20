@@ -14,9 +14,10 @@ const app = DOM.create(App, null, null, {
   }
 })
 
-console.warn('CREATE', app)
+console.warn('CREATE')
+console.log(app)
 
-DOM.update({
+const updatedApp = DOM.update({
   time: window.performance.now() - now,
   asd: {
     111: {
@@ -27,9 +28,14 @@ DOM.update({
   }
 }, App)
 
-const updatedApp = DOM.update({
+console.warn('UPDATE')
+console.log(updatedApp)
+
+const updatedApp2 = DOM.update({
   ye: '11',
   time: 'qew'
 }, App)
 
-console.log(updatedApp)
+console.warn('UPDATE')
+console.log(updatedApp2)
+console.log(app)
