@@ -32,10 +32,12 @@ console.warn('UPDATE')
 console.log(updatedApp)
 
 const updatedApp2 = DOM.update({
-  ye: '11',
-  time: 'qew'
+  ye: 'test',
+  time: '11.22.33'
 }, App)
 
 console.warn('UPDATE')
 console.log(updatedApp2)
 console.log(app)
+
+document.body.appendChild(document.createTextNode('check the console'))

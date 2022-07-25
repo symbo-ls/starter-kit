@@ -16,9 +16,9 @@
     "reinstall": "rm yarn.lock && rm -rf node_modules/@rackai && yarn"
   },
   "dependencies": {
-    "smbls": "latest",
     "@domql/transform-emotion": "latest",
-    "domql": "latest"
+    "domql": "2.2.2",
+    "smbls": "1.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
