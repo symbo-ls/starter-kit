@@ -1,7 +1,5 @@
 'use strict'
 
-import { init } from 'smbls'
-
 /**
  * Colors
  * @tutorial https://docs.symbols.app/color
@@ -67,7 +65,7 @@ const TYPOGRAPHY = {
  */
 const SPACING = {}
 
-init({
+export default {
   COLOR,
   GRADIENT,
   THEME,
@@ -75,4 +73,4 @@ init({
   SPACING,
   FONT,
   FONT_FAMILY
-})
+}
