@@ -36,6 +36,3 @@ node_modules
 .parcel-cache
 .cache
 dist
-
-# Yarn lock
-yarn.lock

@@ -1,7 +1,0 @@
-tasks:
-  - command: gp await-port 1234 && gp preview $(gp url 1234)
-  - init: yarn
-    command: yarn start
-ports:
-  - port: 1234
-    onOpen: ignore
