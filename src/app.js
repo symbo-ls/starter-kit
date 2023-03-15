@@ -6,8 +6,7 @@ export const App = {
   extend: Flex,
 
   props: {
+    theme: 'document',
     align: 'center center'
-  },
-
-  strong: '✅ domql render'
+  }
 }
