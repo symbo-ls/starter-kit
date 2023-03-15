@@ -5,13 +5,13 @@ import { create } from 'smbls'
 import { Sync, DevFocus, inspectOnKey } from '@symbo.ls/socket-ui'
 
 import { App } from './app'
-import system from './system'
+import designSystem from './designSystem'
 
 create({
   extend: [Sync, DevFocus, App]
 }, {
   key: config.key,
-  system,
+  designSystem,
   editor: {
     remote: true,
     async: true,
