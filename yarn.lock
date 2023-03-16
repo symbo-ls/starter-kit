@@ -1988,9 +1988,9 @@
     tslib "^2.4.0"
 
 "@symbo.ls/atoms@latest":
-  version "2.10.190"
-  resolved "https://registry.yarnpkg.com/@symbo.ls/atoms/-/atoms-2.10.190.tgz#94c1929f5f7e6e8ff33304b27a8d9f170d627a33"
-  integrity sha512-Q9hr6PLMAGOafM0b47YcRqfocUeXpVQPQc1m8a/yqT0MEQoaO1mq1pWX5vaMbRvIyWNOSDW6cud9x0T/osb+0A==
+  version "2.10.198"
+  resolved "https://registry.yarnpkg.com/@symbo.ls/atoms/-/atoms-2.10.198.tgz#4b3070ecd7b5fd160f537141764016de3943e475"
+  integrity sha512-JTiYXyvSbYG4gSwfFjeYY72bYckLr6e/VQ27dsz+cWCtJEKIE4cNN/bFWe3SDGN3J2dsojq2IeCBb9jyt+cx5g==
   dependencies:
     "@domql/utils" latest
     "@symbo.ls/create-emotion" latest
@@ -2043,9 +2043,9 @@
     "@symbo.ls/button" latest
 
 "@symbo.ls/cli@latest":
-  version "2.10.188"
-  resolved "https://registry.yarnpkg.com/@symbo.ls/cli/-/cli-2.10.188.tgz#48022d8ac1c45cd7bd4965447fdc3aaf5a36372e"
-  integrity sha512-45H9WVNFt74xbLH1clTG/Cekwp/qrPPN7XFG1geOpkvcnNoFgBJERH5TknXt8YhnAYSiJBYCf/hPYobHtMQqQw==
+  version "2.10.191"
+  resolved "https://registry.yarnpkg.com/@symbo.ls/cli/-/cli-2.10.191.tgz#ff7f1085c8e55e5682ab69c79563e090554dd7cb"
+  integrity sha512-embvHwo+BUa3X46INOcScI+GQ4kYYLAPuCJWA+4o8iqoqi//ZFqXiVQAGSSVANre2vcIt6dmdnG5SFOO4XpfJw==
   dependencies:
     "@symbo.ls/init" latest
     "@symbo.ls/socket" latest
@@ -2101,9 +2101,9 @@
   integrity sha512-8sUv25oaFYdcs4V2J059vaNpZbNzrsLfbwszEaUmVn61DADPRaFGIIeAGeCQoiBBF1J85jYGW3uG6X8oB63U/A==
 
 "@symbo.ls/dropdown@latest":
-  version "2.10.188"
-  resolved "https://registry.yarnpkg.com/@symbo.ls/dropdown/-/dropdown-2.10.188.tgz#25405b30b19b4af769436e8157f2e3864b06a6da"
-  integrity sha512-tzm3LNuJMJ9HWWwEioRzIov08fyi2Yl/eDnikePbB/dK89W129AmV6+NdBNvxLF1JdQavlripttGu84mB2N9cA==
+  version "2.10.198"
+  resolved "https://registry.yarnpkg.com/@symbo.ls/dropdown/-/dropdown-2.10.198.tgz#05076400fef933172677a8aacf765f80c35cacd4"
+  integrity sha512-jabMkh+XLd8rmrd7cuxyMkXXemwpRHBGuKyK25z9iQ6lFa04qH168HwJIHPIm4O3qG5t5hmcp05pAtABHKBiTg==
   dependencies:
     "@symbo.ls/atoms" latest
     "@symbo.ls/button" latest
@@ -2209,9 +2209,9 @@
     "@symbo.ls/scratch" latest
 
 "@symbo.ls/scratch@latest":
-  version "2.10.189"
-  resolved "https://registry.yarnpkg.com/@symbo.ls/scratch/-/scratch-2.10.189.tgz#2edebc1bf8049d99d95ae9ff5d5a4e7803d0c362"
-  integrity sha512-27dZjfwE4JvbRtRpwekiYyj27NhOYHVBQ8RwAc1azbO1kNWc+jOTpf71d1eH0Aw2cRRRHK/S+Kz7s2ChKCJp8A==
+  version "2.10.198"
+  resolved "https://registry.yarnpkg.com/@symbo.ls/scratch/-/scratch-2.10.198.tgz#130baa2180d3e5b088120f2ce49ff682a72c1017"
+  integrity sha512-j6OjEegmcbHTuF/yRoT2mL+rGQYhBo1Q6lebCdozOpwBETBPKIYrFS46n946H/ljWW9TocNJUOqx5cEnPE2kuw==
   dependencies:
     "@domql/utils" latest
     "@symbo.ls/utils" latest
@@ -2286,9 +2286,9 @@
     "@symbo.ls/atoms" latest
 
 "@symbo.ls/tooltip@latest":
-  version "2.10.188"
-  resolved "https://registry.yarnpkg.com/@symbo.ls/tooltip/-/tooltip-2.10.188.tgz#ec3e27e744a51af92674141d5076e0f986a8064d"
-  integrity sha512-OIe2s3cSLGl6IQxFA9PVAbNFyS4D5fUC/oyC2e+CMWS05nMhgowuA7vz+TS1/SfGH59Sgbj5NfjldjipUvC/ug==
+  version "2.10.198"
+  resolved "https://registry.yarnpkg.com/@symbo.ls/tooltip/-/tooltip-2.10.198.tgz#8bc85f1ad6c2b7f095ee69bc87428de7a8d29aec"
+  integrity sha512-Z2KcvH0jv4stp5MaRJi9R/eoR9jLBntWf2q+tSqCnkb9DNoA7PQkoprwDvrBTAN4oAWqdgbtcnRhGalKN/OM0w==
   dependencies:
     "@symbo.ls/atoms" latest
 
@@ -2848,9 +2848,9 @@ cross-spawn@^7.0.2:
     which "^2.0.1"
 
 css-in-props@latest:
-  version "2.10.188"
-  resolved "https://registry.yarnpkg.com/css-in-props/-/css-in-props-2.10.188.tgz#f93968bc30211dcff87df77d2d5afc00fe95adb3"
-  integrity sha512-Q3wY9ZBNxlfN+7iH+87HhxZAxj5lqO6ZeAlmFlDYIYfhxwcST+C8TgP1WAejrnaVXe0q3P6lyHB9kJ7sI+6v9Q==
+  version "2.10.195"
+  resolved "https://registry.yarnpkg.com/css-in-props/-/css-in-props-2.10.195.tgz#e344f582ab13677027267472756f68b616548d81"
+  integrity sha512-zWvsiXKRu8lHn9ZhRg6wy9BCY2dlbcSEZUEtEMF340hXSuq5n9+xEsptYMLDbTiyJ2oMYTAkgZ4MXTROkcYrBw==
   dependencies:
     "@domql/utils" latest
     "@symbo.ls/atoms" latest
@@ -5382,9 +5382,9 @@ slice-ansi@^4.0.0:
     is-fullwidth-code-point "^3.0.0"
 
 smbls@latest:
-  version "2.10.188"
-  resolved "https://registry.yarnpkg.com/smbls/-/smbls-2.10.188.tgz#04ed4d89913255ac5ffdc1e403197f547b015bc5"
-  integrity sha512-gYPJsoncHN4twsRPRgBd+LcYSn/6+qsNJ1oLsXyUwgYubXZT/nlWvKw0ErrZX/47R0sgU5tP0n7IcMkZoM6OTw==
+  version "2.10.191"
+  resolved "https://registry.yarnpkg.com/smbls/-/smbls-2.10.191.tgz#8627820b36a8afb4bb56f33e103c45091d28c9a2"
+  integrity sha512-eNhoeS8ez4k1iR9PbqiMJ5xDzIntAfHz+Kw+cu+qb7/oxh3gGDYOVp5eWk8bPzN8XgTZ0TG3uJo+8oN6WCY3wg==
   dependencies:
     "@symbo.ls/cli" latest
     "@symbo.ls/create" latest
