@@ -4,6 +4,7 @@ export default {
   '/': {
     H1: 'Hello Symbols',
     P: 'Lorem ipsum dolor sit amet',
+    TestComponent: {},
     Link: {
       href: '/about',
       text: 'About us'
