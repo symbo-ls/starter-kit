@@ -23,15 +23,13 @@ const GRADIENT = {}
  */
 const THEME = {
   document: {
-    variants: {
-      dark: {
-        color: 'white',
-        background: 'black'
-      },
-      light: {
-        background: 'white',
-        color: 'black'
-      }
+    '@dark': {
+      color: 'white',
+      background: 'black'
+    },
+    '@light': {
+      background: 'white',
+      color: 'black'
     }
   }
 }
