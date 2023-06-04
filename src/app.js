@@ -7,6 +7,14 @@ export const App = {
 
   props: {
     theme: 'document',
-    align: 'center center'
-  }
+    flow: 'column',
+    height: '100vh',
+    align: 'center space-between'
+  },
+
+  Header: {},
+
+  content: {},
+
+  Footer: { text: 'Footer' }
 }

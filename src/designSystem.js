@@ -30,6 +30,10 @@ const THEME = {
     '@light': {
       background: 'white',
       color: 'black'
+    },
+    '@midnight': {
+      background: '#112233',
+      color: 'white'
     }
   }
 }
@@ -63,7 +67,18 @@ const TYPOGRAPHY = {
  */
 const SPACING = {}
 
+const options = {
+  verbose: false,
+  useReset: true,
+  useFontImport: true,
+  useVariable: true,
+  useSvgSprite: true,
+  useDocumentTheme: true,
+  useIconSprite: true
+}
+
 export default {
+  ...options,
   COLOR,
   GRADIENT,
   THEME,
