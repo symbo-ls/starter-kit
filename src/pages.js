@@ -7,7 +7,8 @@ export default {
     TestComponent: {},
     Link: {
       props: {
-        href: '/about',
+        href: 'https://symbols.app/developers',
+        target: '_blank',
         ':hover': {
           '& svg': {
             margin: '- Y - -'
@@ -19,7 +20,7 @@ export default {
         margin: '- X - -',
         name: 'arrow up right'
       },
-      Span: 'About us'
+      Span: 'Checkout Docs'
     }
   },
   '/about': {
