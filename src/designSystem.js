@@ -1,5 +1,7 @@
 'use strict'
 
+import FEATHER_ICONS from '@symbo.ls/feather-icons'
+
 /**
  * Colors
  * @tutorial https://docs.symbols.app/color
@@ -70,10 +72,10 @@ const SPACING = {}
 const options = {
   verbose: false,
   useReset: true,
+  useDocumentTheme: true,
   useFontImport: true,
   useVariable: true,
   useSvgSprite: true,
-  useDocumentTheme: true,
   useIconSprite: true
 }
 
@@ -82,6 +84,7 @@ export default {
   COLOR,
   GRADIENT,
   THEME,
+  ICONS: FEATHER_ICONS,
   TYPOGRAPHY,
   SPACING,
   FONT,

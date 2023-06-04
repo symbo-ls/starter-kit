@@ -6,8 +6,9 @@ export default {
     P: 'Lorem ipsum dolor sit amet',
     TestComponent: {},
     Link: {
-      href: '/about',
-      text: 'About us'
+      props: { href: '/about' },
+      Icon: { name: 'arrow up right' },
+      Span: 'About us'
     }
   },
   '/about': {

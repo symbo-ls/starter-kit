@@ -9,7 +9,8 @@ export const Header = {
     padding: 'Z B',
     align: 'center space-between'
   },
-  text: 'Hello!',
+
+  Link: { href: '/', text: 'Hello!' },
 
   ThemeSwitcher: {}
 }
