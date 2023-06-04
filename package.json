@@ -1,4 +1,6 @@
 {
+  "name": "@symbo.ls/starter-kit",
+  "version": "1.0.0",
   "description": "Example dev setup to use Symbols",
   "author": "symbo.ls",
   "private": true,
@@ -17,11 +19,10 @@
     "@parcel/babel-preset-env": "^2.0.1",
     "@parcel/transformer-inline-string": "^2.9.1",
     "@parcel/transformer-raw": "^2.9.1",
-    "buffer": "^5.5.0",
-    "eslint": "^8.4.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-node": "^11.1.0",
+    "buffer": "^6.0.3",
+    "eslint": "^8.42.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.27.5",
     "parcel": "^2.0.1",
     "standard": "^16.0.1"
   }
