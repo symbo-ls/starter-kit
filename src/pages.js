@@ -6,8 +6,19 @@ export default {
     P: 'Lorem ipsum dolor sit amet',
     TestComponent: {},
     Link: {
-      props: { href: '/about' },
-      Icon: { name: 'arrow up right' },
+      props: {
+        href: '/about',
+        ':hover': {
+          '& svg': {
+            margin: '- Y - -'
+          }
+        }
+      },
+      Icon: {
+        transition: 'margin ease A',
+        margin: '- X - -',
+        name: 'arrow up right'
+      },
       Span: 'About us'
     }
   },

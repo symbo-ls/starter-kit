@@ -10,7 +10,7 @@ const COLOR = {
   transparent: 'transparent',
   black: 'black',
   white: 'white',
-  orange: '#ff6600'
+  orange: '#E98232'
 }
 
 /**
