@@ -6,7 +6,7 @@
   "private": true,
   "repository": "https://github.com/symbo-ls/starter-kit",
   "scripts": {
-    "start": "parcel index.html --no-cache",
+    "start": "parcel index.html",
     "build": "parcel build index.html"
   },
   "dependencies": {
