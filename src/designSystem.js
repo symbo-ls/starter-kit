@@ -1,6 +1,6 @@
 'use strict'
 
-import FEATHER_ICONS from '@symbo.ls/feather-icons'
+import ICONS from '@symbo.ls/default-icons'
 
 /**
  * Colors
@@ -84,7 +84,7 @@ export default {
   COLOR,
   GRADIENT,
   THEME,
-  ICONS: FEATHER_ICONS,
+  ICONS,
   TYPOGRAPHY,
   SPACING,
   FONT,
