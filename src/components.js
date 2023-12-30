@@ -53,16 +53,3 @@ export const Footer = {
     order: 9
   }
 }
-
-export const TestComponent = {
-  props: {
-    padding: 'Z B',
-    round: 'A',
-    margin: 'A -Z C',
-    background: 'orange .35',
-    text: 'test',
-    ':hover': {
-      background: 'orange .35 +35'
-    }
-  }
-}

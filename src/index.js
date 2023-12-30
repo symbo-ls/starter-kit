@@ -1,15 +1,27 @@
 'use strict'
 
-import config from '../symbols.json'
-import { create } from 'smbls'
+import { create, Flex } from 'smbls'
 
-import { App } from './app'
 import designSystem from './designSystem'
 import * as components from './components'
 import pages from './pages'
 
-create(App, {
-  key: config.key,
+create({
+  extend: Flex,
+
+  props: {
+    theme: 'document',
+    flow: 'column',
+    height: '100vh',
+    align: 'center space-between'
+  },
+
+  Header: {},
+
+  content: {},
+
+  Footer: { text: 'Footer' }
+}, {
   designSystem,
   components,
   pages
