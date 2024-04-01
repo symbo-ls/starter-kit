@@ -1,3 +1,4 @@
 {
-  "key": "projectName.symbo.ls"
+  "key": "projectName.symbo.ls",
+  "distDir": "./smbls"
 }
