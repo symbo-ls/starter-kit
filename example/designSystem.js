@@ -1,6 +1,6 @@
 'use strict'
 
-import ICONS from '@symbo.ls/default-icons'
+import { DEFAULT_ICONS } from '@symbo.ls/default-icons'
 
 /**
  * Colors
@@ -84,7 +84,7 @@ export default {
   COLOR,
   GRADIENT,
   THEME,
-  ICONS,
+  ICONS: DEFAULT_ICONS,
   TYPOGRAPHY,
   SPACING,
   FONT,
