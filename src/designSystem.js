@@ -1,6 +1,6 @@
 'use strict'
 
-import ICONS from '@symbo.ls/default-icons'
+import { ICONS } from '@symbo.ls/default-icons'
 
 /**
  * Colors
