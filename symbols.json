@@ -1,3 +1,4 @@
 {
-  "key": "projectName.symbo.ls"
+  "key": "demo.symbo.ls",
+  "distDir": "smbls_dist"
 }

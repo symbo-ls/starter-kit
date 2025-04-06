@@ -1,28 +1,28 @@
 'use strict'
 
-import { create, Flex } from 'smbls'
+import { create } from 'smbls'
 
 import designSystem from './designSystem'
 import * as components from './components'
 import pages from './pages'
 
-create({
-  extend: Flex,
+async function initialize () {
+  let fetched_context
+  try {
+    fetched_context = await import('../smbls_dist')
+  } catch (error) {
+    console.error('Failed to load fetched_context:', error)
+    fetched_context = {}
+  }
 
-  props: {
-    theme: 'document',
-    flow: 'column',
-    height: '100vh',
-    align: 'center space-between'
-  },
+  create(
+    {},
+    fetched_context || {
+      designSystem,
+      components,
+      pages
+    }
+  )
+}
 
-  Header: {},
-
-  content: {},
-
-  Footer: { text: 'Footer' }
-}, {
-  designSystem,
-  components,
-  pages
-})
+initialize()
