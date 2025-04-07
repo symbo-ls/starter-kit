@@ -1,6 +1,6 @@
 {
   "name": "@symbo.ls/starter-kit",
-  "version": "2.28.5",
+  "version": "2.28.6",
   "description": "Example dev setup to use Symbols",
   "author": "symbo.ls",
   "repository": "https://github.com/symbo-ls/starter-kit",
@@ -26,5 +26,5 @@
     "parcel": "^2.13.3",
     "standard": "^17.1.2"
   },
-  "gitHead": "9726763189f1728aeeaf7aa16917dd6cf3e70a5c"
+  "gitHead": "61a9b70d5ea2dcc97a57deb0fcd22c219cfbff57"
 }
