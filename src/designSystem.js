@@ -70,7 +70,7 @@ const TYPOGRAPHY = {
 const SPACING = {}
 
 const options = {
-  verbose: false,
+  verbose: true,
   useReset: true,
   useDocumentTheme: true,
   useFontImport: true,

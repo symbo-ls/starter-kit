@@ -2,11 +2,29 @@
 
 export default {
   '/': {
-    H1: { text: 'Hello Symbols' },
-    P: { text: 'Lorem ipsum dolor sit amet' }
+    Header: {},
+    TestComponent: {},
+    Link: {
+      href: 'https://symbols.app/developers',
+      target: '_blank',
+      ':hover': {
+        '& svg': {
+          margin: '- Y - -'
+        }
+      },
+      Icon: {
+        transition: 'margin ease A',
+        margin: '- X - -',
+        name: 'arrow up right'
+      },
+      Span: 'Checkout Docs'
+    }
   },
   '/about': {
-    H3: { text: 'This is Symbols starter-kit' },
-    P: { text: 'Lorem ipsum dolor sit amet' }
+    Header: {},
+    Link: {
+      href: '/',
+      text: 'Go Back'
+    }
   }
 }

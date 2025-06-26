@@ -6,13 +6,11 @@ export default {
     P: 'Lorem ipsum dolor sit amet',
     TestComponent: {},
     Link: {
-      props: {
-        href: 'https://symbols.app/developers',
-        target: '_blank',
-        ':hover': {
-          '& svg': {
-            margin: '- Y - -'
-          }
+      href: 'https://symbols.app/developers',
+      target: '_blank',
+      ':hover': {
+        '& svg': {
+          margin: '- Y - -'
         }
       },
       Icon: {

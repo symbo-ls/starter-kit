@@ -1,22 +1,16 @@
 'use strict'
 
-import { Flex, Link } from 'smbls'
-
 export const Header = {
-  extend: Flex,
-  props: {
-    minWidth: '100%',
-    padding: 'Z B',
-    align: 'center space-between'
-  },
-
+  display: 'flex',
+  minWidth: '100%',
+  padding: 'Z B',
+  align: 'center space-between',
   Flex: {
-    props: { gap: 'C' },
-    childExtend: {
-      extend: Link,
-      props: ({ props }) => ({
-        textDecoration: window.location.pathname === props.href ? 'underline' : 'none'
-      })
+    gap: 'C',
+    childExtends: {
+      extends: 'Link',
+      textDecoration: ({ props }) =>
+        window.location.pathname === props.href ? 'underline' : 'none'
     },
     Text_logo: { href: '/', text: 'Hello!' },
     Text_about: { href: '/about', text: 'About' }
@@ -26,30 +20,38 @@ export const Header = {
 }
 
 export const ThemeSwitcher = {
-  extend: Flex,
-  props: { gap: 'A2' },
-  childExtend: {
-    props: (element, state) => ({
-      active: state.globalTheme === element.key,
-      cursor: 'pointer',
-      '.active': {
-        fontWeight: '900'
-      }
-    }),
-    on: {
-      click: (event, element, state) => {
-        state.update({ globalTheme: element.key })
-      }
+  display: 'flex',
+  gap: 'A2',
+  childExtends: {
+    isActive: (element, state) =>
+      state.globalTheme === element.key.toLowerCase(),
+    cursor: 'pointer',
+    '.isActive': {
+      fontWeight: '900'
+    },
+    onClick: (event, element, state, ctx) => {
+      console.log(element.key.toLowerCase())
+      ctx.designSystem.globalTheme = element.key.toLowerCase()
+      state.update({ globalTheme: element.key.toLowerCase() })
     }
   },
-  dark: { text: 'Dark' },
-  light: { text: 'Light' },
-  midnight: { text: 'Midnight' }
+  Dark: { text: 'Dark' },
+  Light: { text: 'Light' },
+  Midnight: { text: 'Midnight' }
 }
 
 export const Footer = {
-  props: {
-    padding: 'Z B',
-    order: 9
+  padding: 'Z B',
+  order: 9
+}
+
+export const TestComponent = {
+  padding: 'Z B',
+  round: 'A',
+  margin: 'A -Z C',
+  background: 'orange .35',
+  text: 'test',
+  ':hover': {
+    background: 'orange .35 +35'
   }
 }

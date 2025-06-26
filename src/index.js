@@ -12,7 +12,6 @@ async function initialize () {
     fetched_context = await import('../smbls_dist')
   } catch (error) {
     console.error('Failed to load fetched_context:', error)
-    fetched_context = {}
   }
 
   create(

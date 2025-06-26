@@ -5,7 +5,7 @@
   "author": "symbo.ls",
   "repository": "https://github.com/symbo-ls/starter-kit",
   "scripts": {
-    "start": "npx parcel index.html",
+    "start": "npx parcel index.html --no-cache --watch-dir=../domql",
     "fetch": "npx @symbo.ls/cli fetch",
     "build": "npx parcel build index.html"
   },
@@ -20,7 +20,7 @@
     "@parcel/transformer-inline-string": "^2.13.3",
     "@parcel/transformer-raw": "^2.13.3",
     "buffer": "^5.5.0||^6.0.0",
-    "eslint": "^9.23.0",
+    "eslint": "^9.28.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.31.0",
     "parcel": "^2.13.3",
