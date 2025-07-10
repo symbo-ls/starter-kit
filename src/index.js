@@ -9,7 +9,7 @@ import pages from './pages'
 async function initialize () {
   let fetched_context
   try {
-    fetched_context = await import('../smbls_dist')
+    fetched_context = await import('../test_src')
   } catch (error) {
     console.error('Failed to load fetched_context:', error)
   }
