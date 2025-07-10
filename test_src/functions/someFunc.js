@@ -1,0 +1,1 @@
+export const someFunc = function(element, state, context) {}
