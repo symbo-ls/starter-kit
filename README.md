@@ -10,10 +10,10 @@ git clone git@github.com:symbo-ls/starter-kit.git
 
 2. Install scripts
 ```
-yarn
+npm install
 ```
 
 3. Run the project
 ```
-yarn start
+npm start
 ```
