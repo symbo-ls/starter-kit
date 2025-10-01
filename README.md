@@ -1,5 +1,5 @@
 # Symbols Starter Kit
-Example dev setup (boilerplate) to use [DOMQL](https://github.com/domql/domql). You can also check live editor [Playground](https://domql.com/playground/).
+Example dev setup (boilerplate) to use [DOMQL](https://github.com/domql/domql).
 
 ### Setup
 
