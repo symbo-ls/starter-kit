@@ -1,5 +1,5 @@
 # Symbols Starter Kit
-Example dev setup (boilerplate) to use [DOMQL](https://github.com/domql/domql).
+Example dev setup (boilerplate) to use [DOMQL](https://github.com/domql/domql). You can also check out [Symbols developers documentation](https://symbols.app/developers) for advanced use.
 
 ### Setup
 
