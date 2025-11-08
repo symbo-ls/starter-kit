@@ -1,6 +1,6 @@
 {
   "name": "@symbo.ls/starter-kit",
-  "version": "2.32.7",
+  "version": "2.32.8",
   "description": "Example dev setup to use Symbols",
   "author": "symbo.ls",
   "repository": "https://github.com/symbo-ls/starter-kit",
@@ -9,7 +9,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "smbls": "^2.32.7"
+    "smbls": "^2.32.8"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
@@ -25,5 +25,5 @@
     "parcel": "^2.16.0",
     "standard": "^17.1.2"
   },
-  "gitHead": "c99355e8e88604af8376bebbf553e559c3f2db76"
+  "gitHead": "f7531cb41b391a1357d31a03fbdd33ad93e0a29d"
 }
