@@ -1,0 +1,940 @@
+{
+  "_migrationMeta": {
+    "hasBasedData": false,
+    "hasRichData": false,
+    "sourceVersion": "1.0",
+    "migratedAt": "2026-01-31T10:54:35.564Z"
+  },
+  "_id": "697ddf6b1be566825c3e15ba",
+  "name": "FindHome",
+  "key": "findhome.symbo.ls",
+  "tier": "starter",
+  "projectType": "web",
+  "state": {},
+  "settings": {
+    "remote": false,
+    "async": false,
+    "inspect": true,
+    "liveSync": true,
+    "syncCanvas": true
+  },
+  "designSystem": {
+    "COLOR": {
+      "black": "#000",
+      "white": "#fff"
+    },
+    "GRADIENT": {},
+    "THEME": {
+      "document": {
+        "@light": {
+          "color": "black",
+          "background": "white"
+        },
+        "@dark": {
+          "color": "white",
+          "background": "black"
+        }
+      },
+      "none": {
+        "color": "none",
+        "background": "none"
+      },
+      "transparent": {
+        "color": "currentColor",
+        "background": "transparent"
+      }
+    },
+    "FONT": {},
+    "FONT_FAMILY": {},
+    "TYPOGRAPHY": {
+      "base": 16,
+      "ratio": 1.25,
+      "subSequence": true,
+      "templates": {}
+    },
+    "SPACING": {
+      "base": 16,
+      "ratio": 1.618,
+      "subSequence": true
+    },
+    "TIMING": {},
+    "CLASS": {},
+    "GRID": {},
+    "ICONS": {},
+    "SHAPE": {},
+    "RESET": {},
+    "ANIMATION": {},
+    "MEDIA": {},
+    "CASES": {},
+    "useReset": true,
+    "useVariable": true,
+    "useFontImport": true,
+    "useIconSprite": true,
+    "useSvgSprite": true,
+    "useDefaultConfig": true,
+    "useDocumentTheme": true,
+    "verbose": false
+  },
+  "components": {
+    "Header": {
+      "Logo": {}
+    },
+    "Logo": {
+      "extends": "Link",
+      "text": "Find Home"
+    }
+  },
+  "pages": {
+    "/": {
+      "extends": "Page",
+      "minHeight": "100vh",
+      "padding": "C1",
+      "--ink": "#0f172a",
+      "--ink-soft": "#1f2937",
+      "--slate": "#334155",
+      "--muted": "#475569",
+      "--paper": "#ffffff",
+      "--mist": "#f8fafc",
+      "--line": "#e2e8f0",
+      "--line-strong": "#cbd5f5",
+      "--navy": "#0f172a",
+      "--navy-70": "rgba(15, 23, 42, 0.7)",
+      "--shadow-strong": "rgba(15, 23, 42, 0.15)",
+      "--shadow-soft": "rgba(15, 23, 42, 0.08)",
+      "--brand": "#1d4ed8",
+      "--brand-dark": "#1e40af",
+      "--accent": "#1a1613",
+      "--accent-bright": "#fb923c",
+      "--teal": "#0f766e",
+      "--sun": "rgba(245, 184, 136, 0.25)",
+      "--sky": "rgba(126, 177, 255, 0.22)",
+      "--paper-warm": "#f7f3ee",
+      "--paper-cool": "#eef2ff",
+      "--font-sans": "\"Sora\", sans-serif",
+      "--font-mono": "\"JetBrains Mono\", monospace",
+      "background": "radial-gradient(700px circle at 15% 20%, var(--sun), transparent 60%), radial-gradient(700px circle at 85% 10%, var(--sky), transparent 55%), linear-gradient(180deg, var(--paper-warm) 0%, var(--paper-cool) 100%)",
+      "color": "var(--ink-soft)",
+      "fontFamily": "var(--font-sans)",
+      "overflow": "auto",
+      "state": {
+        "intent": "buy",
+        "propertyType": "apartment",
+        "location": "Tbilisi Saburtalo",
+        "budget": "up to $120k",
+        "specs": "2 rooms",
+        "language": "mixed",
+        "output": "",
+        "copied": false,
+        "loaded": false
+      },
+      "onInit": "(el, state) => {\n  }",
+      "onRender": "(el, state) => {\n    if (!state.loaded) state.update({\n      loaded: true\n    });\n  }",
+      "Container": {
+        "Panels": {
+          "FormPanel": {
+            "FormGrid": {
+              "IntentField": {
+                "Select": {
+                  "tag": "select",
+                  "value": "(el, state) => state.intent",
+                  "padding": "Z2 A",
+                  "borderRadius": "Z",
+                  "border": "1px solid var(--line-strong)",
+                  "background": "var(--mist)",
+                  "fontSize": "B",
+                  "onChange": "(e, el, state) => (void 0)(state, {\n                intent: e.target.value\n              })",
+                  "OptionBuy": {
+                    "tag": "option",
+                    "attr": {
+                      "value": "by"
+                    },
+                    "text": "buy"
+                  },
+                  "OptionRent": {
+                    "tag": "option",
+                    "attr": {
+                      "value": "ret"
+                    },
+                    "text": "rent"
+                  },
+                  "OptionDaily": {
+                    "tag": "option",
+                    "attr": {
+                      "value": "daiy"
+                    },
+                    "text": "daily"
+                  },
+                  "OptionCommercial": {
+                    "tag": "option",
+                    "attr": {
+                      "value": "commercil"
+                    },
+                    "text": "commercial"
+                  },
+                  "OptionLand": {
+                    "tag": "option",
+                    "attr": {
+                      "value": "lad"
+                    },
+                    "text": "land"
+                  }
+                },
+                "flow": "y",
+                "gap": "Z2",
+                "Label": {
+                  "tag": "label",
+                  "text": "Intent",
+                  "fontSize": "Z2",
+                  "color": "var(--muted)"
+                }
+              },
+              "TypeField": {
+                "Input": {
+                  "tag": "input",
+                  "value": "(el, state) => state.propertyType",
+                  "attr": {
+                    "placeholder": "apartment, house, office..."
+                  },
+                  "padding": "Z2 A",
+                  "borderRadius": "Z",
+                  "border": "1px solid var(--line-strong)",
+                  "background": "var(--mist)",
+                  "fontSize": "B",
+                  "onInput": "(e, el, state) => (void 0)(state, {\n                propertyType: e.target.value\n              })"
+                },
+                "flow": "y",
+                "gap": "Z2",
+                "Label": {
+                  "tag": "label",
+                  "text": "Property Type",
+                  "fontSize": "Z2",
+                  "color": "var(--muted)"
+                }
+              },
+              "LocationField": {
+                "Input": {
+                  "tag": "input",
+                  "value": "(el, state) => state.location",
+                  "attr": {
+                    "placeholder": "city / district / neighborhood"
+                  },
+                  "padding": "Z2 A",
+                  "borderRadius": "Z",
+                  "border": "1px solid var(--line-strong)",
+                  "background": "var(--mist)",
+                  "fontSize": "B",
+                  "onInput": "(e, el, state) => (void 0)(state, {\n                location: e.target.value\n              })"
+                },
+                "flow": "y",
+                "gap": "Z2",
+                "Label": {
+                  "tag": "label",
+                  "text": "Location",
+                  "fontSize": "Z2",
+                  "color": "var(--muted)"
+                }
+              },
+              "BudgetField": {
+                "Input": {
+                  "tag": "input",
+                  "value": "(el, state) => state.budget",
+                  "attr": {
+                    "placeholder": "up to $120k or 800-1200 GEL"
+                  },
+                  "padding": "Z2 A",
+                  "borderRadius": "Z",
+                  "border": "1px solid var(--line-strong)",
+                  "background": "var(--mist)",
+                  "fontSize": "B",
+                  "onInput": "(e, el, state) => (void 0)(state, {\n                budget: e.target.value\n              })"
+                },
+                "flow": "y",
+                "gap": "Z2",
+                "Label": {
+                  "tag": "label",
+                  "text": "Budget",
+                  "fontSize": "Z2",
+                  "color": "var(--muted)"
+                }
+              },
+              "SpecsField": {
+                "Input": {
+                  "tag": "input",
+                  "value": "(el, state) => state.specs",
+                  "attr": {
+                    "placeholder": "2 rooms, 60 m2, 3rd floor"
+                  },
+                  "padding": "Z2 A",
+                  "borderRadius": "Z",
+                  "border": "1px solid var(--line-strong)",
+                  "background": "var(--mist)",
+                  "fontSize": "B",
+                  "onInput": "(e, el, state) => (void 0)(state, {\n                specs: e.target.value\n              })"
+                },
+                "flow": "y",
+                "gap": "Z2",
+                "Label": {
+                  "tag": "label",
+                  "text": "Specs",
+                  "fontSize": "Z2",
+                  "color": "var(--muted)"
+                }
+              },
+              "LanguageField": {
+                "ToggleGroup": {
+                  "KaButton": {
+                    "tag": "button",
+                    "text": "ka",
+                    "attr": {
+                      "type": "button"
+                    },
+                    "padding": "Z2 B",
+                    "borderRadius": "Z",
+                    "border": "1px solid var(--line-strong)",
+                    "background": "var(--mist)",
+                    "color": "var(--muted)",
+                    "fontWeight": "600",
+                    "cursor": "pointer",
+                    "isActive": "(el, state) => state.language === \"ka\"",
+                    ".isActive": {
+                      "background": "var(--teal)",
+                      "color": "var(--mist)",
+                      "border": "1px solid var(--teal)"
+                    },
+                    "onClick": "(e, el, state) => (void 0)(state, {\n                  language: \"ka\"\n                })"
+                  },
+                  "EnButton": {
+                    "tag": "button",
+                    "text": "en",
+                    "attr": {
+                      "type": "button"
+                    },
+                    "padding": "Z2 B",
+                    "borderRadius": "Z",
+                    "border": "1px solid var(--line-strong)",
+                    "background": "var(--mist)",
+                    "color": "var(--muted)",
+                    "fontWeight": "600",
+                    "cursor": "pointer",
+                    "isActive": "(el, state) => state.language === \"en\"",
+                    ".isActive": {
+                      "background": "var(--teal)",
+                      "color": "var(--mist)",
+                      "border": "1px solid var(--teal)"
+                    },
+                    "onClick": "(e, el, state) => (void 0)(state, {\n                  language: \"en\"\n                })"
+                  },
+                  "MixedButton": {
+                    "tag": "button",
+                    "text": "mixed",
+                    "attr": {
+                      "type": "button"
+                    },
+                    "padding": "Z2 B",
+                    "borderRadius": "Z",
+                    "border": "1px solid var(--line-strong)",
+                    "background": "var(--mist)",
+                    "color": "var(--muted)",
+                    "fontWeight": "600",
+                    "cursor": "pointer",
+                    "isActive": "(el, state) => state.language === \"mixed\"",
+                    ".isActive": {
+                      "background": "var(--teal)",
+                      "color": "var(--mist)",
+                      "border": "1px solid var(--teal)"
+                    },
+                    "onClick": "(e, el, state) => (void 0)(state, {\n                  language: \"mixed\"\n                })"
+                  },
+                  "flow": "x",
+                  "gap": "Z2"
+                },
+                "flow": "y",
+                "gap": "Z2",
+                "Label": {
+                  "tag": "label",
+                  "text": "Language Preference",
+                  "fontSize": "Z2",
+                  "color": "var(--muted)"
+                }
+              },
+              "ActionRow": {
+                "GenerateButton": {
+                  "tag": "button",
+                  "text": "Generate JSON",
+                  "attr": {
+                    "type": "button"
+                  },
+                  "padding": "Z2 B",
+                  "borderRadius": "Z",
+                  "background": "var(--brand)",
+                  "color": "white",
+                  "border": "1px solid var(--brand)",
+                  "fontWeight": "600",
+                  "cursor": "pointer",
+                  "transition": "all 0.2s ease",
+                  ":hover": {
+                    "background": "var(--brand-dark)"
+                  },
+                  "onClick": "(e, el, state) => (void 0)(state)"
+                },
+                "ResetButton": {
+                  "tag": "button",
+                  "text": "Reset",
+                  "attr": {
+                    "type": "button"
+                  },
+                  "padding": "Z2 B",
+                  "borderRadius": "Z",
+                  "background": "var(--paper)",
+                  "color": "var(--ink-soft)",
+                  "border": "1px solid var(--line-strong)",
+                  "fontWeight": "600",
+                  "cursor": "pointer",
+                  "transition": "all 0.2s ease",
+                  ":hover": {
+                    "background": "var(--mist)"
+                  },
+                  "onClick": "(e, el, state) => (void 0)(state)"
+                },
+                "flow": "x",
+                "wrap": "wrap",
+                "gap": "Z2",
+                "marginTop": "A2"
+              },
+              "flow": "y",
+              "gap": "B1"
+            },
+            "flex": "1 1 420px",
+            "minWidth": "320px",
+            "padding": "C",
+            "background": "var(--paper)",
+            "border": "1px solid var(--line)",
+            "borderRadius": "B",
+            "boxShadow": "0 20px 60px var(--shadow-soft)",
+            "opacity": 0,
+            "transform": "translateY(16px)",
+            "transition": "all 0.45s ease",
+            "isLoaded": "(el, state) => state.loaded",
+            ".isLoaded": {
+              "opacity": 1,
+              "transform": "translateY(0)"
+            },
+            "PanelTitle": {
+              "tag": "h2",
+              "text": "Input Details",
+              "fontSize": "C",
+              "marginBottom": "A2",
+              "color": "var(--ink)"
+            }
+          },
+          "flow": "x",
+          "wrap": "wrap",
+          "gap": "C1",
+          "align": "stretch flex-start",
+          "OutputPanel": {
+            "flex": "1 1 420px",
+            "minWidth": "320px",
+            "padding": "C",
+            "background": "var(--navy)",
+            "borderRadius": "B",
+            "boxShadow": "0 20px 60px var(--shadow-strong)",
+            "color": "var(--mist)",
+            "opacity": 0,
+            "transform": "translateY(16px)",
+            "transition": "all 0.45s ease 0.05s",
+            "isLoaded": "(el, state) => state.loaded",
+            ".isLoaded": {
+              "opacity": 1,
+              "transform": "translateY(0)"
+            },
+            "PanelTitle": {
+              "tag": "h2",
+              "text": "JSON Output",
+              "fontSize": "C",
+              "marginBottom": "Z2"
+            },
+            "PanelMeta": {
+              "tag": "p",
+              "text": "18 sites · Plain text queries",
+              "fontSize": "Z2",
+              "color": "rgba(226 232, 240, 0.8)",
+              "marginBottom": "A2"
+            },
+            "OutputArea": {
+              "tag": "textarea",
+              "value": "(el, state) => state.output",
+              "attr": {
+                "readonly": true
+              },
+              "padding": "B",
+              "borderRadius": "Z",
+              "border": "1px solid rgba(148, 163, 184, 0.3)",
+              "background": "var(--navy-70)",
+              "color": "#e2e8f0",
+              "fontFamily": "var(--font-mono)",
+              "fontSize": "Z2",
+              "minHeight": "320px",
+              "resize": "vertical",
+              "width": "100%"
+            },
+            "OutputActions": {
+              "flow": "x",
+              "wrap": "wrap",
+              "gap": "Z2",
+              "marginTop": "A2",
+              "CopyButton": {
+                "tag": "button",
+                "text": "(el, state) => state.copied ? \"Copied\" : \"Copy JSON\"",
+                "attr": {
+                  "type": "button"
+                },
+                "padding": "Z2 B",
+                "borderRadius": "Z",
+                "background": "var(--accent)",
+                "color": "var(--navy)",
+                "border": "1px solid var(--accent)",
+                "fontWeight": "700",
+                "cursor": "pointer",
+                "transition": "all 0.2s ease",
+                ":hover": {
+                  "background": "var(--accent-bright)"
+                },
+                "onClick": "async (e, el, state) => {\n              try {\n                await (void 0).clipboard.writeText(state.output || \"\");\n                state.update({\n                  copied: true\n                });\n                setTimeout(() => state.update({\n                  copied: false\n                }), 1400);\n              } catch (error) {\n                state.update({\n                  copied: false\n                });\n              }\n            }"
+              },
+              "Helper": {
+                "tag": "p",
+                "text": "Queries are plain text only. No filters or URL params.",
+                "fontSize": "Z2",
+                "color": "rgba(226, 232, 240, 0.8)"
+              }
+            }
+          }
+        },
+        "maxWidth": "1200px",
+        "margin": "0 auto",
+        "flow": "y",
+        "gap": "C1",
+        "position": "relative",
+        "Hero": {
+          "flow": "y",
+          "gap": "B",
+          "padding": "B",
+          "Title": {
+            "tag": "h1",
+            "text": "GeoHome Query Builder",
+            "fontSize": "E",
+            "fontWeight": "700",
+            "lineHeight": "1.1",
+            "letterSpacing": "-0.2em",
+            "color": "var(--ink)"
+          },
+          "SubTitle": {
+            "tag": "p",
+            "text": "Generate site-ready search prompts for Georgian real estate marketplaces. Fill the form, copy JSON, and drop it into your workflow.",
+            "maxWidth": "720px",
+            "fontSize": "B",
+            "lineHeight": "1.5",
+            "color": "var(--slate)"
+          },
+          "BadgeRow": {
+            "flow": "x",
+            "wrap": "wrap",
+            "gap": "Z2",
+            "marginTop": "Z2",
+            "children": [
+              {
+                "text": "myhome.ge"
+              },
+              {
+                "text": "ss.ge"
+              },
+              {
+                "text": "livo.ge"
+              },
+              {
+                "text": "place.ge"
+              },
+              {
+                "text": "home.ge"
+              },
+              {
+                "text": "avo.ge"
+              },
+              {
+                "text": "avi.ge"
+              },
+              {
+                "text": "geohome.ge"
+              },
+              {
+                "text": "allhome.ge"
+              },
+              {
+                "text": "greenlife.allhome.ge"
+              },
+              {
+                "text": "avezor.ge"
+              },
+              {
+                "text": "makler24.ge"
+              },
+              {
+                "text": "searchproperty.ge"
+              },
+              {
+                "text": "area.ge"
+              },
+              {
+                "text": "korter.ge"
+              },
+              {
+                "text": "flatfy.ge"
+              },
+              {
+                "text": "krisha.ge"
+              },
+              {
+                "text": "korter.com"
+              }
+            ],
+            "childProps": {
+              "padding": "Z1 Z2",
+              "background": "var(--paper)",
+              "border": "1px solid var(--line)",
+              "borderRadius": "Z",
+              "fontSize": "Z2",
+              "color": "var(--muted)",
+              "boxShadow": "0 10px 24px rgba(15, 23, 42, 0.06)"
+            }
+          }
+        }
+      }
+    }
+  },
+  "package": "1",
+  "functions": {
+    "default": {}
+  },
+  "methods": {
+    "default": {}
+  },
+  "version": "1.0.23",
+  "versionscount": 24,
+  "seats": 1,
+  "integrations": {},
+  "dependencies": {
+    "smbls": "latest",
+    "chart.js": "^4.5.1",
+    "fuse.js": "^7.1.0",
+    "ninja-keys": "^1.2.2"
+  },
+  "files": {},
+  "snippets": {
+    "default": {}
+  },
+  "access": "account",
+  "isSharedLibrary": false,
+  "status": "active",
+  "framework": "platform",
+  "designTool": "none",
+  "language": "javascript",
+  "visibility": "private",
+  "environments": {
+    "dev": {
+      "mode": "latest",
+      "branch": "main",
+      "enabled": true,
+      "label": "Development"
+    },
+    "testing": {
+      "mode": "version",
+      "enabled": false,
+      "label": "Testing"
+    },
+    "staging": {
+      "mode": "version",
+      "enabled": false,
+      "label": "Staging"
+    },
+    "prod": {
+      "mode": "published",
+      "enabled": true,
+      "label": "Production"
+    }
+  },
+  "ownerType": "user",
+  "ownerUser": "6868484c0cf470c5890933cc",
+  "system": {},
+  "canvas": {},
+  "colors": {},
+  "icons": {},
+  "define": {},
+  "versions": [
+    "697ddf6b1be566825c3e15db"
+  ],
+  "pullRequests": [],
+  "members": [
+    {
+      "_id": "697ddf6b1be566825c3e15bd",
+      "user": {
+        "_id": "6868484c0cf470c5890933cc",
+        "email": "nika@symbols.app",
+        "name": "Nika",
+        "username": "nikoloza",
+        "id": "6868484c0cf470c5890933cc"
+      },
+      "project": "697ddf6b1be566825c3e15ba",
+      "role": "owner",
+      "joinedAt": "2026-01-31T10:54:35.600Z",
+      "createdAt": "2026-01-31T10:54:35.601Z",
+      "updatedAt": "2026-01-31T10:54:35.601Z",
+      "__v": 0,
+      "id": "697ddf6b1be566825c3e15bd"
+    }
+  ],
+  "packages": {},
+  "payments": [],
+  "project": {},
+  "useLibraries": [],
+  "usedByProjects": [],
+  "domains": {},
+  "environmentHosts": [],
+  "multiEnvironment": {
+    "active": false,
+    "wildcard": null,
+    "totalTls": null
+  },
+  "slug": "findhome",
+  "createdAt": "2026-01-31T10:54:35.565Z",
+  "updatedAt": "2026-02-05T22:31:00.262Z",
+  "__v": 2,
+  "publishedVersion": "697ddf6b1be566825c3e15db",
+  "subscription": "697ddf6b1be566825c3e15ec",
+  "metadata": {},
+  "id": "697ddf6b1be566825c3e15ba",
+  "schema": {
+    "components": {
+      "Header": {
+        "key": "Header",
+        "type": "components",
+        "settings": {
+          "gridOptions": {
+            "w": 3,
+            "h": 2,
+            "x": 3,
+            "y": 0
+          }
+        },
+        "error": null,
+        "uses": [
+          "Logo"
+        ],
+        "code": "export default {/////n  Logo: {}/////n}"
+      },
+      "Logo": {
+        "key": "Logo",
+        "type": "components",
+        "settings": {
+          "gridOptions": {
+            "w": 3,
+            "h": 2,
+            "x": 6,
+            "y": 0
+          }
+        },
+        "error": null,
+        "uses": [
+          "Link"
+        ],
+        "code": "export default {/////n  extends: 'Link',/////n  text: 'Find Home'/////n}"
+      }
+    },
+    "integrations": {},
+    "snippets": {
+      "default": {
+        "title": "default",
+        "key": "default",
+        "type": "snippets",
+        "code": "export default {}"
+      }
+    },
+    "pages": {
+      "main": {
+        "title": "main",
+        "key": "main",
+        "type": "pages",
+        "settings": {
+          "gridOptions": {
+            "w": "3",
+            "h": "2",
+            "x": "9",
+            "y": "0"
+          }
+        },
+        "props": {},
+        "interactivity": [],
+        "dataTypes": [],
+        "error": null
+      },
+      "/": {
+        "title": "/",
+        "key": "/",
+        "type": "pages",
+        "settings": {
+          "gridOptions": {
+            "h": 5,
+            "w": 3,
+            "x": 0,
+            "y": 0
+          }
+        },
+        "props": {},
+        "interactivity": [],
+        "dataTypes": [],
+        "error": null
+      }
+    },
+    "state": {},
+    "files": {},
+    "dependencies": {
+      "smbls": {
+        "key": "smbls",
+        "resolvedVersion": "latest",
+        "type": "dependency",
+        "version": "latest",
+        "status": "done"
+      },
+      "chart.js": {
+        "key": "chart.js",
+        "resolvedVersion": "^4.5.1",
+        "type": "dependency",
+        "version": "^4.5.1",
+        "status": "done"
+      },
+      "fuse.js": {
+        "key": "fuse.js",
+        "resolvedVersion": "^7.1.0",
+        "type": "dependency",
+        "version": "^7.1.0",
+        "status": "done"
+      },
+      "ninja-keys": {
+        "key": "ninja-keys",
+        "resolvedVersion": "^1.2.2",
+        "type": "dependency",
+        "version": "^1.2.2",
+        "status": "done"
+      }
+    },
+    "methods": {
+      "default": {
+        "title": "default",
+        "key": "default",
+        "type": "methods",
+        "code": "export default {}"
+      }
+    },
+    "functions": {
+      "default": {
+        "title": "default",
+        "key": "default",
+        "type": "functions",
+        "code": "export default {}"
+      }
+    },
+    "secrets": {},
+    "designSystem": {
+      "COLOR": {
+        "black": "#000",
+        "white": "#fff"
+      },
+      "GRADIENT": {},
+      "THEME": {
+        "document": {
+          "@light": {
+            "color": "black",
+            "background": "white"
+          },
+          "@dark": {
+            "color": "white",
+            "background": "black"
+          }
+        },
+        "none": {
+          "color": "none",
+          "background": "none"
+        },
+        "transparent": {
+          "color": "currentColor",
+          "background": "transparent"
+        }
+      },
+      "FONT": {},
+      "FONT_FAMILY": {},
+      "TYPOGRAPHY": {
+        "base": 16,
+        "ratio": 1.25,
+        "subSequence": true,
+        "templates": {}
+      },
+      "SPACING": {
+        "base": 16,
+        "ratio": 1.618,
+        "subSequence": true
+      },
+      "TIMING": {},
+      "CLASS": {},
+      "GRID": {},
+      "ICONS": {},
+      "SHAPE": {},
+      "RESET": {},
+      "ANIMATION": {},
+      "MEDIA": {},
+      "CASES": {},
+      "useReset": true,
+      "useVariable": true,
+      "useFontImport": true,
+      "useIconSprite": true,
+      "useSvgSprite": true,
+      "useDefaultConfig": true,
+      "useDocumentTheme": true,
+      "verbose": false
+    }
+  },
+  "secrets": {},
+  "__pending": {
+    "count": 0,
+    "uncommitted": false,
+    "etag": "1.0.23:0"
+  },
+  "sharedLibraries": [],
+  "icon": null,
+  "branch": "main",
+  "latestVersion": "1.0.23",
+  "isLatest": true,
+  "projectInfo": {
+    "id": "697ddf6b1be566825c3e15ba",
+    "key": "findhome.symbo.ls",
+    "name": "FindHome",
+    "updatedAt": "2026-02-05T22:31:00.262Z"
+  },
+  "projectMeta": {
+    "id": "697ddf6b1be566825c3e15ba",
+    "key": "findhome.symbo.ls",
+    "name": "FindHome",
+    "tier": "starter",
+    "visibility": "private",
+    "access": "account",
+    "framework": "platform",
+    "language": "javascript",
+    "status": "active",
+    "isSharedLibrary": false,
+    "icon": null,
+    "createdAt": "2026-01-31T10:54:35.565Z",
+    "updatedAt": "2026-02-05T22:31:00.262Z"
+  },
+  "owner": {
+    "id": "6868484c0cf470c5890933cc",
+    "username": "nikoloza"
+  }
+}

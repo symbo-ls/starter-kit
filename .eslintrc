@@ -1,3 +1,13 @@
 {
-  "extends": "standard"
+  "extends": "standard",
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "requireConfigFile": false
+  },
+  "rules": {
+    "no-unused-vars": "warn",
+    "import/no-duplicates": "warn"
+  }
 }

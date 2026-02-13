@@ -7,9 +7,14 @@
   "repository": "https://github.com/symbo-ls/starter-kit",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint . --ext .js --fix"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
+    "fuse.js": "^7.1.0",
+    "ninja-keys": "^1.2.2",
     "smbls": "latest"
   },
   "devDependencies": {
@@ -23,7 +28,8 @@
     "eslint": "^8.42.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.27.5",
-    "parcel": "^2.13.0",
-    "standard": "^16.0.1"
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "parcel": "^2.13.0"
   }
 }

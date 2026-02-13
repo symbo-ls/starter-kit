@@ -1,4 +1,6 @@
 {
-  "key": "projectName.symbo.ls",
-  "distDir": "./smbls"
+  "key": "findhome.symbo.ls",
+  "distDir": "./smbls",
+  "version": "1.0.23",
+  "branch": "main"
 }
