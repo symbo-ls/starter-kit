@@ -234,3 +234,9 @@ DOMQL v3 removes DOMQL-specific wrappers and relies on flat, explicit object str
   },
 }
 ```
+
+---
+
+## Symbols Feedback Conventions
+
+Supplemental conventions are merged into [CLAUDE.md](CLAUDE.md).

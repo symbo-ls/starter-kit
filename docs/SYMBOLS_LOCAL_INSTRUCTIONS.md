@@ -1397,3 +1397,9 @@ export const logClick = function (count) {
 ```
 
 This architecture ensures **true independence** of components, **zero runtime compilation**, and **environment agnostic** execution.
+
+---
+
+## Symbols Feedback Conventions
+
+Supplemental conventions are merged into [CLAUDE.md](CLAUDE.md).

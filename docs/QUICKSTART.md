@@ -77,3 +77,9 @@ smbls completion bash --install
 ---
 
 _Documentation compiled from community discussions. For the latest updates, refer to the official Symbols documentation or use `smbls --help`._
+
+---
+
+## Symbols Feedback Conventions
+
+Supplemental conventions are merged into [CLAUDE.md](CLAUDE.md).

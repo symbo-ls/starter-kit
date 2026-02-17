@@ -318,3 +318,9 @@ UI must demonstrate:
 - Controlled expressiveness
 - Cohesive modern identity
 - Experience confidence
+
+---
+
+## Symbols Feedback Conventions
+
+Supplemental conventions are merged into [CLAUDE.md](CLAUDE.md).

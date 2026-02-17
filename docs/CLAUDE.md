@@ -26,10 +26,10 @@ This project uses **DOMQL v3 syntax exclusively**. Never use v2 patterns.
 
 ```js
 // CORRECT
-export const Header = { extends: 'Flex', padding: 'A' }
+export const Header = { extends: "Flex", padding: "A" };
 
 // WRONG — never do this
-export const Header = (el, state) => ({ padding: 'A' })
+export const Header = (el, state) => ({ padding: "A" });
 ```
 
 ### 2. NO imports between project files
@@ -56,7 +56,7 @@ import { parseData } from '../functions/parseData.js'
 // The key name IS the component — no extends needed when key matches
 {
   UpChart: {
-    flex: '1'
+    flex: "1";
   }
 }
 // Equivalent to: { UpChart: { extends: 'UpChart', flex: '1' } }
@@ -154,14 +154,14 @@ smbls/
 
 ```js
 export const ComponentName = {
-  extends: 'Flex', // v3: always "extends" (plural)
-  childExtends: 'ListItem', // v3: always "childExtends" (plural)
+  extends: "Flex", // v3: always "extends" (plural)
+  childExtends: "ListItem", // v3: always "childExtends" (plural)
 
   // Props flattened directly — CSS, HTML, custom
-  padding: 'A B',
-  background: 'surface',
-  borderRadius: 'B',
-  theme: 'primary',
+  padding: "A B",
+  background: "surface",
+  borderRadius: "B",
+  theme: "primary",
 
   // Events — onX prefix
   onClick: (e, el, state) => {},
@@ -170,19 +170,19 @@ export const ComponentName = {
 
   // Conditional cases
   isActive: false,
-  '.isActive': { background: 'primary', color: 'white' },
+  ".isActive": { background: "primary", color: "white" },
 
   // Responsive
-  '@mobile': { padding: 'A' },
-  '@tablet': { padding: 'B' },
+  "@mobile": { padding: "A" },
+  "@tablet": { padding: "B" },
 
   // Child components — PascalCase keys, no imports
   Header: {},
   Content: {
-    Article: { text: 'Hello' }
+    Article: { text: "Hello" },
   },
-  Footer: {}
-}
+  Footer: {},
+};
 ```
 
 ---
@@ -365,8 +365,8 @@ export default {
   base: 16,
   ratio: 1.25,
   subSequence: true,
-  templates: {}
-}
+  templates: {},
+};
 ```
 
 The same letter tokens (A, B, C, etc.) apply to fontSize, with values computed from the typography sequence rather than the spacing sequence.
@@ -376,12 +376,12 @@ The same letter tokens (A, B, C, etc.) apply to fontSize, with values computed f
 ## Shorthand Props
 
 ```js
-flow: 'y' // flexFlow: 'column'
-flow: 'x' // flexFlow: 'row'
-align: 'center space-between' // alignItems + justifyContent
-round: 'B' // borderRadius
-size: 'C' // width + height
-wrap: 'wrap' // flexWrap
+flow: "y"; // flexFlow: 'column'
+flow: "x"; // flexFlow: 'row'
+align: "center space-between"; // alignItems + justifyContent
+round: "B"; // borderRadius
+size: "C"; // width + height
+wrap: "wrap"; // flexWrap
 ```
 
 ---
@@ -422,39 +422,39 @@ color: 'white 0.65'                  // white at 65% opacity
 // designSystem/index.js — full configuration
 export default {
   COLOR: {
-    black: '#000',
-    white: '#fff',
-    softBlack: '#1d1d1d',
+    black: "#000",
+    white: "#fff",
+    softBlack: "#1d1d1d",
     // Array format for light/dark: [lightValue, darkValue]
-    title: ['--gray1 1', '--gray15 1'],
-    document: ['--gray15 1', '--gray1 1 +4']
+    title: ["--gray1 1", "--gray15 1"],
+    document: ["--gray15 1", "--gray1 1 +4"],
   },
   GRADIENT: {},
   THEME: {
     document: {
-      '@light': { color: 'black', background: 'white' },
-      '@dark': { color: 'white', background: 'softBlack' }
+      "@light": { color: "black", background: "white" },
+      "@dark": { color: "white", background: "softBlack" },
     },
     transparent: {
-      '@dark': { background: 'transparent', color: 'white 0.65' },
-      '@light': { background: 'transparent', color: 'black 0.65' }
+      "@dark": { background: "transparent", color: "white 0.65" },
+      "@light": { background: "transparent", color: "black 0.65" },
     },
     button: {
-      '@dark': {
-        color: 'white',
-        background: 'transparent',
-        ':hover': { background: 'deepFir' },
-        ':active': { background: 'deepFir +15' }
-      }
+      "@dark": {
+        color: "white",
+        background: "transparent",
+        ":hover": { background: "deepFir" },
+        ":active": { background: "deepFir +15" },
+      },
     },
     field: {
-      '@dark': {
-        color: 'gray14',
-        background: 'gray3 0.5',
-        ':hover': { background: 'gray3 0.65 +2' },
-        ':focus': { background: 'gray3 0.65 +6' }
-      }
-    }
+      "@dark": {
+        color: "gray14",
+        background: "gray3 0.5",
+        ":hover": { background: "gray3 0.65 +2" },
+        ":focus": { background: "gray3 0.65 +6" },
+      },
+    },
   },
   FONT: {},
   FONT_FAMILY: {},
@@ -462,12 +462,12 @@ export default {
     base: 16,
     ratio: 1.25,
     subSequence: true,
-    templates: {}
+    templates: {},
   },
   SPACING: {
     base: 16,
     ratio: 1.618,
-    subSequence: true
+    subSequence: true,
   },
   TIMING: {},
   GRID: {},
@@ -485,8 +485,8 @@ export default {
   useDefaultConfig: true,
   useDocumentTheme: true,
   verbose: false,
-  globalTheme: 'dark'
-}
+  globalTheme: "dark",
+};
 ```
 
 ---
@@ -565,19 +565,19 @@ Use `scope` for component-specific helpers. Use `functions/` for reusable utilit
 
 ```js
 export const Dashboard = {
-  extends: 'Page',
+  extends: "Page",
 
   scope: {
     fetchMetrics: (el, s, timeRange) => {
       // el.call() for global functions — no imports
-      el.call('apiFetch', 'POST', '/api/metrics', { timeRange }).then((data) =>
-        s.update({ metrics: data })
-      )
-    }
+      el.call("apiFetch", "POST", "/api/metrics", { timeRange }).then((data) =>
+        s.update({ metrics: data }),
+      );
+    },
   },
 
-  onInit: (el, s) => el.scope.fetchMetrics(el, s, 5)
-}
+  onInit: (el, s) => el.scope.fetchMetrics(el, s, 5),
+};
 ```
 
 ---
@@ -614,12 +614,12 @@ State values can be accessed in strings (template binding) and functions:
 ```js
 // Template string binding
 {
-  text: '{{ name }} {{ surname }}'
+  text: "{{ name }} {{ surname }}";
 }
 
 // Function access
 {
-  text: (el, s) => s.name + ' ' + s.surname
+  text: (el, s) => s.name + " " + s.surname;
 }
 ```
 
@@ -637,16 +637,16 @@ State values can be accessed in strings (template binding) and functions:
 ### State Methods
 
 ```js
-s.update({ key: value }) // Update + re-render
+s.update({ key: value }); // Update + re-render
 s.apply((s) => {
-  s.items.push(newItem)
-}) // Mutate with function
-s.replace(data, { preventUpdate: true }) // Replace without render
-s.root.update({ modal: '/add-network' }) // Update root state
-s.root.quietUpdate({ modal: null }) // Update root without listener
-s.parent.update({ isActive: true }) // Update parent state
-s.toggle('isActive') // Toggle boolean value
-s.destroy() // Destroy state and references
+  s.items.push(newItem);
+}); // Mutate with function
+s.replace(data, { preventUpdate: true }); // Replace without render
+s.root.update({ modal: "/add-network" }); // Update root state
+s.root.quietUpdate({ modal: null }); // Update root without listener
+s.parent.update({ isActive: true }); // Update parent state
+s.toggle("isActive"); // Toggle boolean value
+s.destroy(); // Destroy state and references
 ```
 
 ### Root State
@@ -656,7 +656,7 @@ Root state is application-level global state accessible via `state.root`:
 ```js
 {
   User: {
-    text: (el, s) => (s.root.authToken ? 'Authorized' : 'Not authorized')
+    text: (el, s) => (s.root.authToken ? "Authorized" : "Not authorized");
   }
 }
 ```
@@ -704,19 +704,19 @@ export default { 'chart.js': '4.4.9', 'fuse.js': '7.1.0' }
 ```js
 // designSystem/icons.js — flat camelCase keys with inline SVG strings
 export default {
-  chevronLeft: '<svg ...>...</svg>',
-  search: '<svg ...>...</svg>'
-}
+  chevronLeft: "<svg ...>...</svg>",
+  search: "<svg ...>...</svg>",
+};
 
 // Usage
 {
   Icon: {
-    name: 'chevronLeft'
+    name: "chevronLeft";
   }
 }
 {
   Button: {
-    icon: 'search'
+    icon: "search";
   }
 }
 ```
@@ -763,13 +763,13 @@ export default { '/': main, '/dashboard': dashboard }
 
 ```js
 // From components (el context)
-el.router('/dashboard', el.getRoot())
+el.router("/dashboard", el.getRoot());
 
 // From functions (this context)
-this.call('router', '/dashboard', this.__ref.root)
+this.call("router", "/dashboard", this.__ref.root);
 
 // With dynamic path
-this.call('router', '/network/' + data.protocol, this.__ref.root)
+this.call("router", "/network/" + data.protocol, this.__ref.root);
 ```
 
 ---
@@ -777,14 +777,14 @@ this.call('router', '/network/' + data.protocol, this.__ref.root)
 ## Element Methods
 
 ```js
-element.update(newProps) // Update element
-element.setProps(props) // Update props
-element.set(content) // Set content
-element.remove() // Remove from DOM
-element.lookup('key') // Find ancestor by key
-element.call('functionName', args) // Call global function
-element.scope.localFn(el, s) // Call scope function
-state.update({ key: value }) // Update state and re-render
+element.update(newProps); // Update element
+element.setProps(props); // Update props
+element.set(content); // Set content
+element.remove(); // Remove from DOM
+element.lookup("key"); // Find ancestor by key
+element.call("functionName", args); // Call global function
+element.scope.localFn(el, s); // Call scope function
+state.update({ key: value }); // Update state and re-render
 ```
 
 ---
@@ -975,11 +975,11 @@ export const Modal = {
     Box:
       (s.root.modal && {
         extends: s.root.modal, // Extends from a page path dynamically
-        onClick: (ev) => ev.stopPropagation()
+        onClick: (ev) => ev.stopPropagation(),
       }) ||
-      {}
-  })
-}
+      {},
+  }),
+};
 ```
 
 ---
@@ -987,9 +987,9 @@ export const Modal = {
 ## `hide` Property
 
 ```js
-hide: true // Always hidden
-hide: (el, s) => !s.public_key // Conditionally hidden
-hide: () => window.location.pathname === '/' // Based on URL
+hide: true; // Always hidden
+hide: (el, s) => !s.public_key; // Conditionally hidden
+hide: () => window.location.pathname === "/"; // Based on URL
 ```
 
 ---
@@ -1011,7 +1011,7 @@ hide: () => window.location.pathname === '/' // Based on URL
 
 ```js
 {
-  html: (el, s) => s.message
+  html: (el, s) => s.message;
 } // Render raw HTML content
 ```
 
@@ -1021,16 +1021,16 @@ hide: () => window.location.pathname === '/' // Based on URL
 
 ```js
 {
-  tag: 'canvas'
+  tag: "canvas";
 } // Render as <canvas>
 {
-  tag: 'form'
+  tag: "form";
 } // Render as <form>
 {
-  tag: 'search'
+  tag: "search";
 } // Render as <search>
 {
-  tag: 'strong'
+  tag: "strong";
 } // Override auto-mapped tag
 ```
 
@@ -1041,8 +1041,8 @@ hide: () => window.location.pathname === '/' // Based on URL
 ```js
 export const Dropdown = {
   attr: { dropdown: true }, // Sets data attribute on DOM element
-  tag: 'section'
-}
+  tag: "section",
+};
 ```
 
 ---
@@ -1083,10 +1083,10 @@ Bind a subtree to a specific state key:
 Tokens can be combined with arithmetic:
 
 ```js
-padding: 'A+V2' // A plus V2
-margin: '-Y1 -Z2 - auto' // Negative values, auto
-right: 'A+V2' // Combined tokens
-margin: '- W B+V2 W' // Mix of dash (0), tokens, and math
+padding: "A+V2"; // A plus V2
+margin: "-Y1 -Z2 - auto"; // Negative values, auto
+right: "A+V2"; // Combined tokens
+margin: "- W B+V2 W"; // Mix of dash (0), tokens, and math
 ```
 
 ---
@@ -1095,13 +1095,13 @@ margin: '- W B+V2 W' // Mix of dash (0), tokens, and math
 
 ```js
 // Format: 'colorName opacity lightness'
-background: 'black .001' // black with 0.1% opacity
-background: 'deepFir 1 +5' // deepFir, 100% opacity, +5 lightness
-background: 'gray2 0.85 +16' // gray2, 85% opacity, +16 lightness
-background: 'env .25' // color from design system at 25% opacity
-color: 'white 0.65' // white at 65% opacity
-borderColor: 'gray3 0.65' // gray3 at 65% opacity
-boxShadow: 'black .20, 0px, 5px, 10px, 5px' // shadow with color opacity
+background: "black .001"; // black with 0.1% opacity
+background: "deepFir 1 +5"; // deepFir, 100% opacity, +5 lightness
+background: "gray2 0.85 +16"; // gray2, 85% opacity, +16 lightness
+background: "env .25"; // color from design system at 25% opacity
+color: "white 0.65"; // white at 65% opacity
+borderColor: "gray3 0.65"; // gray3 at 65% opacity
+boxShadow: "black .20, 0px, 5px, 10px, 5px"; // shadow with color opacity
 ```
 
 ---
@@ -1130,10 +1130,10 @@ boxShadow: 'black .20, 0px, 5px, 10px, 5px' // shadow with color opacity
 ```js
 // Format: 'colorName x y depth offset'
 {
-  shadow: 'black A A C'
+  shadow: "black A A C";
 }
 {
-  boxShadow: 'black .20, 0px, 5px, 10px, 5px'
+  boxShadow: "black .20, 0px, 5px, 10px, 5px";
 }
 ```
 
@@ -1143,10 +1143,10 @@ boxShadow: 'black .20, 0px, 5px, 10px, 5px' // shadow with color opacity
 
 ```js
 {
-  transition: 'background, defaultBezier, A'
+  transition: "background, defaultBezier, A";
 }
 {
-  transition: 'A defaultBezier opacity'
+  transition: "A defaultBezier opacity";
 }
 ```
 
@@ -1161,74 +1161,75 @@ Functions use `this` context (bound to the calling element). Define a central fe
 ```js
 // functions/fetch.js — central API wrapper
 export const fetch = async function fetch(
-  method = 'GET',
-  path = '',
+  method = "GET",
+  path = "",
   data,
-  opts = {}
+  opts = {},
 ) {
   const options = {
-    method: method || 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    ...opts
+    method: method || "POST",
+    headers: { "Content-Type": "application/json" },
+    ...opts,
+  };
+
+  const ENDPOINT = "https://api.example.com/api" + path;
+
+  if (data && (options.method === "POST" || options.method === "PUT")) {
+    options.body = JSON.stringify(data);
   }
 
-  const ENDPOINT = 'https://api.example.com/api' + path
-
-  if (data && (options.method === 'POST' || options.method === 'PUT')) {
-    options.body = JSON.stringify(data)
-  }
-
-  const res = await window.fetch(ENDPOINT, options)
+  const res = await window.fetch(ENDPOINT, options);
   if (!res.ok) {
-    const errorText = await res.text()
-    throw new Error(`HTTP ${res.status}: ${errorText}`)
+    const errorText = await res.text();
+    throw new Error(`HTTP ${res.status}: ${errorText}`);
   }
 
-  const contentType = res.headers.get('content-type')
-  if (contentType && contentType.includes('application/json')) return res.json()
-  return res.text()
-}
+  const contentType = res.headers.get("content-type");
+  if (contentType && contentType.includes("application/json"))
+    return res.json();
+  return res.text();
+};
 
 // functions/read.js — simple GET wrapper
 export const read = async function read(path) {
-  return await this.call('fetch', 'GET', path)
-}
+  return await this.call("fetch", "GET", path);
+};
 ```
 
 ### CRUD Operations Pattern
 
 ```js
 // functions/add.js — create new item via form
-export const add = async function addNew(item = 'network') {
-  const formData = new FormData(this.node)
-  let data = Object.fromEntries(formData)
+export const add = async function addNew(item = "network") {
+  const formData = new FormData(this.node);
+  let data = Object.fromEntries(formData);
 
-  const res = await this.call('fetch', 'POST', '/' + item, data)
-  if (!res) return
+  const res = await this.call("fetch", "POST", "/" + item, data);
+  if (!res) return;
 
-  this.state.root.quietUpdate({ modal: null })
-  this.call('router', '/item/' + res.id, this.__ref.root)
-  this.node.reset()
-}
+  this.state.root.quietUpdate({ modal: null });
+  this.call("router", "/item/" + res.id, this.__ref.root);
+  this.node.reset();
+};
 
 // functions/edit.js — update item
-export const edit = async function edit(item = 'network', protocol) {
-  const formData = new FormData(this.node)
-  let data = Object.fromEntries(formData)
+export const edit = async function edit(item = "network", protocol) {
+  const formData = new FormData(this.node);
+  let data = Object.fromEntries(formData);
 
-  const res = await this.call('fetch', 'PUT', `/${protocol}`, data)
-  this.state.root.quietUpdate({ modal: null })
-  this.call('router', '/network/' + protocol, this.__ref.root)
-  this.node.reset()
-}
+  const res = await this.call("fetch", "PUT", `/${protocol}`, data);
+  this.state.root.quietUpdate({ modal: null });
+  this.call("router", "/network/" + protocol, this.__ref.root);
+  this.node.reset();
+};
 
 // functions/remove.js — delete item
-export const remove = async function remove(item = 'network', protocol) {
-  const res = await this.call('fetch', 'DELETE', '/' + protocol)
-  if (!res) return
-  this.state.root.quietUpdate({ modal: null })
-  this.call('router', '/dashboard', this.__ref.root)
-}
+export const remove = async function remove(item = "network", protocol) {
+  const res = await this.call("fetch", "DELETE", "/" + protocol);
+  if (!res) return;
+  this.state.root.quietUpdate({ modal: null });
+  this.call("router", "/dashboard", this.__ref.root);
+};
 ```
 
 ### Data Loading & State Initialization
@@ -1238,18 +1239,18 @@ export const remove = async function remove(item = 'network', protocol) {
 export const setInitialData = function setInitialData(data = {}) {
   this.state.replace(data, {
     preventUpdate: true,
-    preventUpdateListener: true
-  })
-  this.update({}, { preventUpdateListener: true })
-}
+    preventUpdateListener: true,
+  });
+  this.update({}, { preventUpdateListener: true });
+};
 
 // Usage in a page onRender:
 onRender: (el, s) => {
   window.requestAnimationFrame(async () => {
-    const fleet = await el.call('read')
-    el.call('setInitialData', { fleet })
-  })
-}
+    const fleet = await el.call("read");
+    el.call("setInitialData", { fleet });
+  });
+};
 ```
 
 ### Authentication & Routing Guard
@@ -1258,24 +1259,24 @@ onRender: (el, s) => {
 // functions/auth.js
 export const auth = async function auth() {
   if (this.state.root.success) {
-    if (window.location.pathname === '/') {
-      this.call('router', '/dashboard', this.__ref.root)
+    if (window.location.pathname === "/") {
+      this.call("router", "/dashboard", this.__ref.root);
     }
   } else {
-    if (window.location.pathname === '/') {
-      const res = await this.call('fetch', 'GET', '', null, {
-        route: '/auth/me'
-      })
+    if (window.location.pathname === "/") {
+      const res = await this.call("fetch", "GET", "", null, {
+        route: "/auth/me",
+      });
       if (res.success) {
-        this.state.root.update(res)
-        this.call('router', '/dashboard', this.__ref.root)
+        this.state.root.update(res);
+        this.call("router", "/dashboard", this.__ref.root);
       }
-      return res
+      return res;
     } else {
-      this.call('router', '/', this.__ref.root)
+      this.call("router", "/", this.__ref.root);
     }
   }
-}
+};
 ```
 
 ### Form Submission with Login
@@ -1283,30 +1284,30 @@ export const auth = async function auth() {
 ```js
 // pages/signin.js — async form submission with error handling
 export const signin = {
-  flow: 'y',
-  align: 'center',
-  height: '100%',
-  margin: 'auto',
+  flow: "y",
+  align: "center",
+  height: "100%",
+  margin: "auto",
   LoginWindow: {
     onSubmit: async (ev, el, s) => {
-      ev.preventDefault()
-      s.update({ loading: true })
-      const { identifier, password } = s
+      ev.preventDefault();
+      s.update({ loading: true });
+      const { identifier, password } = s;
       try {
-        const loginResult = await el.sdk.login(identifier, password)
-        await el.call('initializeUserSession', { loginData: loginResult })
-        el.router('/dashboard', el.getRoot())
+        const loginResult = await el.sdk.login(identifier, password);
+        await el.call("initializeUserSession", { loginData: loginResult });
+        el.router("/dashboard", el.getRoot());
       } catch (error) {
-        el.call('openNotification', {
-          title: 'Failed to sign in',
+        el.call("openNotification", {
+          title: "Failed to sign in",
           message: error.message,
-          type: 'error'
-        })
-        s.update({ loading: false })
+          type: "error",
+        });
+        s.update({ loading: false });
       }
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ---
@@ -1316,28 +1317,28 @@ export const signin = {
 ```js
 // Table rendering rows from state
 export const Table = {
-  extends: 'Flex',
-  childExtends: ['NetworkRow', 'Link'], // Multiple extends as array
-  width: '100%',
+  extends: "Flex",
+  childExtends: ["NetworkRow", "Link"], // Multiple extends as array
+  width: "100%",
   children: (el, s) => s.fleet, // Dynamic children from state
-  childrenAs: 'state', // Pass each item as child's state
-  flow: 'y'
-}
+  childrenAs: "state", // Pass each item as child's state
+  flow: "y",
+};
 
 // List with childProps controlling child structure
 export const ValidatorsList = {
-  childrenAs: 'state',
+  childrenAs: "state",
   childProps: {
-    flexFlow: 'y',
+    flexFlow: "y",
     ValidatorRow: {},
     ValidatorContent: {
-      padding: 'B C3 C3',
-      hide: (el, s) => !s.isActive // Conditional visibility
-    }
+      padding: "B C3 C3",
+      hide: (el, s) => !s.isActive, // Conditional visibility
+    },
   },
-  gap: 'Z',
-  flexFlow: 'y'
-}
+  gap: "Z",
+  flexFlow: "y",
+};
 ```
 
 ---
@@ -1349,37 +1350,37 @@ Modals are rendered via root state and page paths:
 ```js
 // Open modal — set state to page path
 onClick: (ev, el, s) => {
-  s.update({ modal: '/add-network' })
-}
+  s.update({ modal: "/add-network" });
+};
 
 // Modal component — reads root state and renders page content
 export const Modal = {
   props: (el, s) => ({
-    position: 'absolute',
-    inset: '0',
-    background: 'black 0.95 +15',
-    backdropFilter: 'blur(3px)',
+    position: "absolute",
+    inset: "0",
+    background: "black 0.95 +15",
+    backdropFilter: "blur(3px)",
     zIndex: 99,
     ...(s.root?.modal
-      ? { opacity: 1, visibility: 'visible' }
-      : { opacity: 0, visibility: 'hidden' }),
+      ? { opacity: 1, visibility: "visible" }
+      : { opacity: 0, visibility: "hidden" }),
     onClick: (ev, el, s) => {
-      s.root.update({ modal: false })
-      el.lookup('Modal').removeContent()
-    }
+      s.root.update({ modal: false });
+      el.lookup("Modal").removeContent();
+    },
   }),
   content: (el, s) => ({
     Box:
       (s.root.modal && {
         extend: s.root.modal,
-        props: { onClick: (ev) => ev.stopPropagation() }
+        props: { onClick: (ev) => ev.stopPropagation() },
       }) ||
-      {}
-  })
-}
+      {},
+  }),
+};
 
 // Close modal
-this.state.root.quietUpdate({ modal: null })
+this.state.root.quietUpdate({ modal: null });
 ```
 
 ---
@@ -1388,54 +1389,54 @@ this.state.root.quietUpdate({ modal: null })
 
 ```js
 export const addNetwork = {
-  extends: 'FormModal',
-  tag: 'form',
-  gap: 'C',
+  extends: "FormModal",
+  tag: "form",
+  gap: "C",
   onSubmit: async (ev, el, s) => {
-    ev.preventDefault()
-    await el.call('add', 'network')
+    ev.preventDefault();
+    await el.call("add", "network");
   },
-  Hgroup: { H: { text: 'Add Network' }, P: { text: 'Add new network' } },
+  Hgroup: { H: { text: "Add Network" }, P: { text: "Add new network" } },
   Form: {
-    columns: 'repeat(2, 1fr)',
-    '@mobileM': { columns: 'repeat(1, 1fr)' },
+    columns: "repeat(2, 1fr)",
+    "@mobileM": { columns: "repeat(1, 1fr)" },
     children: () => [
       {
-        gridColumn: '1 / span 2',
-        Caption: { text: 'Protocol' },
+        gridColumn: "1 / span 2",
+        Caption: { text: "Protocol" },
         Field: {
           Input: {
-            name: 'protocol',
+            name: "protocol",
             required: true,
-            placeholder: 'E.g. Polygon',
-            type: 'text'
-          }
-        }
+            placeholder: "E.g. Polygon",
+            type: "text",
+          },
+        },
       },
       {
-        Caption: { text: 'Network Layer' },
+        Caption: { text: "Network Layer" },
         Field: {
           Input: null, // Remove default Input
           Select: {
-            padding: 'A A2',
-            round: 'C1',
-            theme: 'field',
+            padding: "A A2",
+            round: "C1",
+            theme: "field",
             Selects: {
-              name: 'network_layer',
+              name: "network_layer",
               required: true,
               children: [
-                { text: 'Please select', selected: true, disabled: 'disabled' },
-                { text: 'L1', value: 'L1' },
-                { text: 'L2', value: 'L2' }
-              ]
-            }
-          }
-        }
-      }
-    ]
+                { text: "Please select", selected: true, disabled: "disabled" },
+                { text: "L1", value: "L1" },
+                { text: "L2", value: "L2" },
+              ],
+            },
+          },
+        },
+      },
+    ],
   },
-  Button: { text: 'Save', theme: 'primary', type: 'submit' }
-}
+  Button: { text: "Save", theme: "primary", type: "submit" },
+};
 ```
 
 ---
@@ -1465,30 +1466,30 @@ export const Table = {
 ```js
 export const AIThread = {
   children: (el, s) => s.thread,
-  childrenAs: 'state',
+  childrenAs: "state",
   childExtends: {
     props: (el, s) => ({
-      alignSelf: s.role === 'user' ? 'start' : 'end',
+      alignSelf: s.role === "user" ? "start" : "end",
       onRender: (el) => {
         const t = setTimeout(() => {
-          el.node.scrollIntoView()
-          clearTimeout(t)
-        }, 35)
-      }
+          el.node.scrollIntoView();
+          clearTimeout(t);
+        }, 35);
+      },
     }),
     content: (el, s) => {
-      if (s.role === 'user') {
+      if (s.role === "user") {
         return {
-          extends: 'AIMessage',
-          shape: 'bubble',
-          round: 'X C C C',
-          Message: { html: (el, s) => s.message }
-        }
+          extends: "AIMessage",
+          shape: "bubble",
+          round: "X C C C",
+          Message: { html: (el, s) => s.message },
+        };
       }
-      return { extends: 'P', color: 'paragraph', html: (el, s) => s.message }
-    }
-  }
-}
+      return { extends: "P", color: "paragraph", html: (el, s) => s.message };
+    },
+  },
+};
 ```
 
 ---
@@ -1517,30 +1518,30 @@ Use underscore suffix to create multiple instances of the same component:
 
 ```js
 export const NetworkRow = {
-  extends: 'Grid',
-  templateColumns: '3fr 3fr 3fr 2fr 2fr',
-  gap: 'Z2',
-  href: (el, s) => '/network/' + s.protocol,
-  align: 'center',
-  padding: 'A1 A2',
-  childProps: { gap: 'Z2', flexAlign: 'center' },
-  borderWidth: '0 0 1px 0',
-  borderStyle: 'solid',
-  borderColor: '--theme-document-dark-background',
-  cursor: 'pointer',
-  transition: 'background, defaultBezier, A',
-  ':hover': { background: 'deepFir' },
-  ':active': { background: 'deepFir 1 +5' },
+  extends: "Grid",
+  templateColumns: "3fr 3fr 3fr 2fr 2fr",
+  gap: "Z2",
+  href: (el, s) => "/network/" + s.protocol,
+  align: "center",
+  padding: "A1 A2",
+  childProps: { gap: "Z2", flexAlign: "center" },
+  borderWidth: "0 0 1px 0",
+  borderStyle: "solid",
+  borderColor: "--theme-document-dark-background",
+  cursor: "pointer",
+  transition: "background, defaultBezier, A",
+  ":hover": { background: "deepFir" },
+  ":active": { background: "deepFir 1 +5" },
   Name: {
-    Avatar: { src: '{{ protocol }}.png', boxSize: 'B1' },
-    Title: { tag: 'strong', text: (el, s) => s.protocol }
+    Avatar: { src: "{{ protocol }}.png", boxSize: "B1" },
+    Title: { tag: "strong", text: (el, s) => s.protocol },
   },
   Env: {
-    childExtends: 'NetworkRowLabel',
-    childProps: { background: 'env .25' },
-    children: (el, s) => s.parsed?.env
-  }
-}
+    childExtends: "NetworkRowLabel",
+    childProps: { background: "env .25" },
+    children: (el, s) => s.parsed?.env,
+  },
+};
 ```
 
 ---
@@ -1549,36 +1550,36 @@ export const NetworkRow = {
 
 ```js
 // dependencies.js — declare external packages with fixed versions
-export default { 'chart.js': '4.4.9' }
+export default { "chart.js": "4.4.9" };
 
 // Chart component using canvas tag with onRender cleanup
 export const Chart = {
-  tag: 'canvas',
-  minWidth: 'G',
-  minHeight: 'D',
+  tag: "canvas",
+  minWidth: "G",
+  minHeight: "D",
   onRender: async (el, s) => {
-    const { Chart } = await import('chart.js')
-    const ctx = el.node.getContext('2d')
+    const { Chart } = await import("chart.js");
+    const ctx = el.node.getContext("2d");
 
     const chart = new Chart(ctx, {
-      type: 'line',
+      type: "line",
       data: {
         /* chart data */
       },
-      options: { responsive: true, maintainAspectRatio: false }
-    })
+      options: { responsive: true, maintainAspectRatio: false },
+    });
 
     const interval = setInterval(() => {
-      chart.update('none')
-    }, 1100)
+      chart.update("none");
+    }, 1100);
 
     // Return cleanup function — called when element is removed
     return () => {
-      clearInterval(interval)
-      chart.destroy()
-    }
-  }
-}
+      clearInterval(interval);
+      chart.destroy();
+    };
+  },
+};
 ```
 
 ---
@@ -1592,18 +1593,18 @@ When `onRender` returns a function, it's called when the element is removed:
   onRender: (el, s) => {
     const interval = setInterval(() => {
       /* ... */
-    }, 1000)
+    }, 1000);
     const handler = (e) => {
       /* ... */
-    }
-    window.addEventListener('resize', handler)
+    };
+    window.addEventListener("resize", handler);
 
     // Cleanup function
     return () => {
-      clearInterval(interval)
-      window.removeEventListener('resize', handler)
-    }
-  }
+      clearInterval(interval);
+      window.removeEventListener("resize", handler);
+    };
+  };
 }
 ```
 
@@ -1613,14 +1614,14 @@ When `onRender` returns a function, it's called when the element is removed:
 
 ```js
 // Lookup by key name
-const Dropdown = element.lookup('Dropdown')
+const Dropdown = element.lookup("Dropdown");
 
 // Lookup by predicate function
-const Dropdown = element.lookup((el) => el.props.isDropdownRoot)
+const Dropdown = element.lookup((el) => el.props.isDropdownRoot);
 
 // Lookup for ancestor navigation
-const modal = el.lookup('Modal')
-modal.removeContent()
+const modal = el.lookup("Modal");
+modal.removeContent();
 ```
 
 ---
@@ -1652,46 +1653,46 @@ modal.removeContent()
 
 ```js
 export const Prompt = {
-  state: { keyword: '', thread: [], images: [] },
-  tag: 'form',
+  state: { keyword: "", thread: [], images: [] },
+  tag: "form",
   onSubmit: (ev, el, s) => {
-    ev.preventDefault()
-    const value = s.keyword
-    if (!value) return
+    ev.preventDefault();
+    const value = s.keyword;
+    if (!value) return;
 
     s.apply((s) => {
-      s.thread.push({ role: 'user', message: value })
-      s.keyword = ''
-    })
+      s.thread.push({ role: "user", message: value });
+      s.keyword = "";
+    });
 
-    el.Relative.Textarea.value = '' // Direct DOM access for form reset
+    el.Relative.Textarea.value = ""; // Direct DOM access for form reset
 
     setTimeout(async () => {
-      const res = await el.call('giveMeAnswer', value)
+      const res = await el.call("giveMeAnswer", value);
       s.apply((s) => {
-        s.thread.push({ role: 'agent', message: res.summary })
-      })
-    }, 1000)
+        s.thread.push({ role: "agent", message: res.summary });
+      });
+    }, 1000);
   },
   Relative: {
     Textarea: {
       placeholder: '"Ask, Search, Prompt..."',
       onInput: (ev, el, s) => {
-        let prompt = el.node.value.trim()
-        s.replace({ keyword: prompt })
+        let prompt = el.node.value.trim();
+        s.replace({ keyword: prompt });
       },
       onKeydown: (ev, el, s) => {
-        if (ev.key === 'Enter' && !ev.shiftKey) ev.preventDefault()
-        if (ev.key === 'Escape') {
-          ev.stopPropagation()
-          el.node.blur()
+        if (ev.key === "Enter" && !ev.shiftKey) ev.preventDefault();
+        if (ev.key === "Escape") {
+          ev.stopPropagation();
+          el.node.blur();
         }
-      }
+      },
     },
-    Submit: { extends: 'SquareButton', type: 'submit', icon: 'check' }
+    Submit: { extends: "SquareButton", type: "submit", icon: "check" },
   },
-  AIThread: { hide: (el, s) => !s.thread.length }
-}
+  AIThread: { hide: (el, s) => !s.thread.length },
+};
 ```
 
 ---
@@ -1700,26 +1701,26 @@ export const Prompt = {
 
 ```js
 export const Uptime = {
-  extends: 'Flex',
-  flow: 'y',
-  gap: 'Z',
-  Title: { fontSize: 'Z', text: 'Uptime', order: -1 },
+  extends: "Flex",
+  flow: "y",
+  gap: "Z",
+  Title: { fontSize: "Z", text: "Uptime", order: -1 },
   Flex: {
-    gap: 'X',
-    flow: 'row wrap',
-    height: '2.8em',
-    overflow: 'hidden',
+    gap: "X",
+    flow: "row wrap",
+    height: "2.8em",
+    overflow: "hidden",
     children: (el, s) => new Array(300).fill({}), // Generate 300 empty children
     childProps: {
-      minWidth: 'Z1',
-      boxSize: 'Z1',
-      background: 'green .3',
-      border: '1px, solid, green',
-      round: 'W'
+      minWidth: "Z1",
+      boxSize: "Z1",
+      background: "green .3",
+      border: "1px, solid, green",
+      round: "W",
     },
-    ':hover > div': { opacity: 0.5 }
-  }
-}
+    ":hover > div": { opacity: 0.5 },
+  },
+};
 ```
 
 ---
@@ -1728,9 +1729,9 @@ export const Uptime = {
 
 ```js
 export const H1 = {
-  extends: 'smbls.H1',
-  color: 'title'
-}
+  extends: "smbls.H1",
+  color: "title",
+};
 ```
 
 ---
@@ -1740,14 +1741,14 @@ export const H1 = {
 ```js
 // Define a custom property transformer
 export default function paddingEm(val, element, state, context) {
-  const { unit } = element.props
-  const paddingEm = unit === 'em' ? val / 16 + 'em' : val
-  return { paddingEm }
+  const { unit } = element.props;
+  const paddingEm = unit === "em" ? val / 16 + "em" : val;
+  return { paddingEm };
 }
 
 // Use in components
 {
-  paddingEm: 12
+  paddingEm: 12;
 }
 ```
 
@@ -1790,15 +1791,15 @@ smbls sync
 export default {
   FONT: {
     Inter: {
-      url: 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900',
+      url: "https://fonts.googleapis.com/css2?family=Inter:wght@100..900",
       isVariable: true,
-      fontWeight: '100 900'
-    }
+      fontWeight: "100 900",
+    },
   },
   FONT_FAMILY: {
-    primary: 'Inter, sans-serif'
-  }
-}
+    primary: "Inter, sans-serif",
+  },
+};
 ```
 
 ### Grid Configuration
@@ -1807,10 +1808,10 @@ export default {
 export default {
   GRID: {
     columns: 12,
-    gutter: 'A',
-    maxWidth: '1200px'
-  }
-}
+    gutter: "A",
+    maxWidth: "1200px",
+  },
+};
 ```
 
 ### Icon System
@@ -1819,11 +1820,11 @@ export default {
 // Icons are defined as SVG strings with camelCase keys
 export default {
   ICONS: {
-    arrowDown: '<svg>...</svg>',
-    chevronLeft: '<svg>...</svg>',
-    search: '<svg>...</svg>'
-  }
-}
+    arrowDown: "<svg>...</svg>",
+    chevronLeft: "<svg>...</svg>",
+    search: "<svg>...</svg>",
+  },
+};
 ```
 
 ### Media Query Configuration
@@ -1832,15 +1833,15 @@ export default {
 // Media queries are responsive breakpoints
 export default {
   MEDIA: {
-    mobileXS: '320px',
-    mobileS: '375px',
-    mobileM: '425px',
-    tablet: '768px',
-    tabletM: '960px',
-    laptop: '1024px',
-    desktop: '1440px'
-  }
-}
+    mobileXS: "320px",
+    mobileS: "375px",
+    mobileM: "425px",
+    tablet: "768px",
+    tabletM: "960px",
+    laptop: "1024px",
+    desktop: "1440px",
+  },
+};
 ```
 
 ### Shape Configuration
@@ -1857,9 +1858,9 @@ export default {
     },
     bubble: {
       /* rounded bubble shape */
-    }
-  }
-}
+    },
+  },
+};
 ```
 
 ### Animation Configuration
@@ -1870,17 +1871,17 @@ export default {
   ANIMATION: {
     fadeIn: {
       from: { opacity: 0 },
-      to: { opacity: 1 }
+      to: { opacity: 1 },
     },
     shake: {
-      '0%': { transform: 'translateX(0)' },
-      '25%': { transform: 'translateX(-5px)' },
-      '50%': { transform: 'translateX(5px)' },
-      '75%': { transform: 'translateX(-5px)' },
-      '100%': { transform: 'translateX(0)' }
-    }
-  }
-}
+      "0%": { transform: "translateX(0)" },
+      "25%": { transform: "translateX(-5px)" },
+      "50%": { transform: "translateX(5px)" },
+      "75%": { transform: "translateX(-5px)" },
+      "100%": { transform: "translateX(0)" },
+    },
+  },
+};
 ```
 
 ### Timing Configuration
@@ -1892,9 +1893,9 @@ export default {
     base: 300,
     ratio: 1.618,
     // Custom bezier curves
-    defaultBezier: 'cubic-bezier(.19,.22,.4,.86)'
-  }
-}
+    defaultBezier: "cubic-bezier(.19,.22,.4,.86)",
+  },
+};
 ```
 
 ### Unit Configuration
@@ -1903,8 +1904,8 @@ export default {
 // CSS unit configuration
 export default {
   // Unit options: 'em', 'px', 'vmax'
-  unit: 'em'
-}
+  unit: "em",
+};
 ```
 
 ---
@@ -1938,3 +1939,115 @@ export default {
 - Hardcode styles — use design tokens
 - Add top-level `import`/`require` for project files
 - Nest properties inside @media queries (replace at same level only)
+
+---
+
+## Symbols Feedback Conventions (Merged)
+
+These additions capture practical conventions that should be applied alongside the strict rules above.
+
+### 1. Component Naming with Suffixes
+
+- Use `Icon_2` instead of `Icon2` so the framework properly extends the `Icon` component
+- Underscore-separated suffixes (`_2`, `_3`, etc.) ensure child components inherit from the base component
+- Same applies for all components: `Button_2`, `Text_3`, etc.
+
+### 2. Event Handlers
+
+- Do not use `on: { click: ... }` pattern
+- Use `onClick: (event, el, s) => { ... }`
+- Same applies for all events: `onKeydown`, `onSubmit`, `onError`, etc.
+
+### 3. Image Component
+
+- Do not use `tag: 'img'` to create image elements
+- Use `Img` as the component key (e.g. `Img: { src: '...', ... }`)
+- Or use `extends: 'Img'` when a custom key name is needed (e.g. `Favicon: { extends: 'Img', ... }`)
+
+### 4. Flex is Auto-Inferred
+
+- Do not use `extends: 'Flex'` when `align` or `flow` props are present
+- Use `flow` and `align` directly — the framework auto-inferrs Flex behavior
+- Example: `{ flow: 'x', align: 'center', gap: 'A' }` — no need for `extends: 'Flex'`
+
+### 5. Built-in Components
+
+- Use built-in components by key name: `Grid`, `Link`, `Img`, `Flex`
+- PascalCase keys auto-map to matching atoms, so `Grid: {}` already extends Grid — no need for `extends: 'Grid'`
+- Only use `extends` for custom names: `ResultsGrid: { extends: 'Grid', ... }`
+
+### 6. State Functions
+
+- Pattern: `(el, s) => ...` where `el` is element, `s` is state
+- Use `s.update({})` to update state
+- Use `el.call('functionName', ...args)` to call registered functions
+
+### 7. Dynamic Children
+
+- Use `childrenAs: 'state'` with `children: [...]` or `children: (el, s) => [...]` for lists
+- Use `childExtends: 'ComponentName'` to extend a registered component for each child
+- Use `childProps: { ... }` for inline child definitions
+- Do not repeat `extends` + `state` per child — use `childExtends` + `childrenAs: 'state'` + `children` array
+- Do not mix `extends` and props inside `childExtends` — keep `childExtends` as a string and move props to `childProps`
+- Do not use `childExtends` for inline prop objects without `extends` — use `childProps` instead
+- `childExtends` should always be a string (component name), never an object
+
+### 8. Use Atom Components Instead of `tag`
+
+- Do not use `tag: 'a'` — use `extends: 'Link'` (Link atom has built-in router support)
+- Do not use `tag: 'span'` — `Text` is a builtin atom, just use `text` property directly without `extends: 'Text'`
+- Do not use `tag: 'button'` on a `Button` key — the key auto-maps to the Button atom
+- Do not use `tag: 'input'` on an `Input` key — the key auto-maps to the Input atom
+- 15 built-in atoms: `Text`, `Box`, `Flex`, `Grid`, `Link`, `Input`, `Radio`, `Checkbox`, `Svg`, `Icon`, `IconText`, `Button`, `Img`, `Iframe`, `Video`
+- PascalCase keys auto-map to matching atoms/HTML tags, so explicit `tag` is redundant
+
+### 9. No `props:` Wrapper (v2 pattern)
+
+- Do not use `props: { padding: 'A', ... }` — this is v2 syntax
+- Flatten all props directly: `{ padding: 'A', ... }`
+
+### 10. Use Shorthand Props
+
+- `flow: 'y'` instead of `flexFlow: 'column'`
+- `flow: 'x'` instead of `flexFlow: 'row'`
+- `align: 'center space-between'` instead of `alignItems` + `justifyContent`
+- `round: 'B'` instead of `borderRadius`
+- `wrap: 'wrap'` instead of `flexWrap: 'wrap'`
+- `size: 'C'` instead of `width` + `height`
+- Do not use raw `px` values for sizing/spacing — use design system tokens instead
+  - `maxWidth: 'H'` not `maxWidth: '500px'`
+  - `minWidth: 'E1'` not `minWidth: '140px'`
+  - `round: 'F'` not `round: '9999px'` (for pill shapes)
+  - Exception: CSS syntax values like `border: '1px solid ...'` and `boxShadow` keep px
+
+### 11. No Imports Between Project Files
+
+- Components reference each other by PascalCase key name in the tree
+- Functions are called via `el.call('functionName', args)`
+- Never `import { Component } from './Component.js'` for usage in other components
+
+### 12. v3 Syntax Only
+
+- `extends` not `extend`
+- `childExtends` not `childExtend`
+- `onClick: fn` not `on: { click: fn }`
+- Props flattened, not wrapped in `props: {}`
+
+### 13. Button Reset Styling
+
+- Buttons in custom themes need `background: 'transparent'`, `border: 'none'`, and explicit `color`
+- Browsers apply default button styles (gray bg, border) that can hide content on dark backgrounds
+
+### 14. Responsive Design
+
+- Use `@mobileM` media query for mobile adjustments
+- Scale down font sizes and padding proportionally
+- Keep layout structure consistent, just adjust spacing
+
+### 15. Adding Icons to Design System
+
+- All new icons added to `ICONS.js` must be 24x24 (`width="24" height="24"`)
+- If the source SVG has a different size, keep the original `viewBox` but set `width="24" height="24"` on the `<svg>` element
+- Monocolor icons: omit `fill`/`stroke` or use `currentColor` so the framework can control color via CSS
+- Multicolor icons: keep hardcoded colors as-is
+- If the original icon uses pure white (`#fff`) or black (`#000`) fills/strokes, replace them with `currentColor`
