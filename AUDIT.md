@@ -2,7 +2,7 @@
 
 ---
 
-## 1. Installation
+## 1. MCP Installation
 
 ```bash
 pip install symbols-mcp
