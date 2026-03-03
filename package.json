@@ -12,7 +12,7 @@
     "lint:fix": "eslint . --ext .js --fix"
   },
   "dependencies": {
-    "smbls": "latest"
+    "smbls": "^2.34.35"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
