@@ -1,5 +1,5 @@
 # Symbols Starter Kit
-Example dev setup (boilerplate) to use [DOMQL](https://github.com/domql/domql). You can also check live editor [Playground](https://domql.com/playground/).
+Example dev setup (boilerplate) to use [DOMQL](https://github.com/domql/domql). You can also check out [Symbols developers documentation](https://symbols.app/developers) for advanced use.
 
 ### Setup
 
@@ -10,10 +10,10 @@ git clone git@github.com:symbo-ls/starter-kit.git
 
 2. Install scripts
 ```
-yarn
+npm install
 ```
 
 3. Run the project
 ```
-yarn start
+npm start
 ```
