@@ -6,7 +6,8 @@
   "repository": "https://github.com/symbo-ls/starter-kit",
   "scripts": {
     "start": "npx smbls start",
-    "build": "npx smbls build"
+    "build": "npx smbls build",
+    "deploy": "npx smbls deploy"
   },
   "dependencies": {
     "smbls": "^3.4.9"
