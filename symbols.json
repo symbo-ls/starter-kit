@@ -3,5 +3,5 @@
   "version": "1.0.0",
   "branch": "main",
   "bundler": "parcel",
-  "brender": false
+  "brender": true
 }
