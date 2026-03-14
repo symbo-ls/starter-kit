@@ -6,7 +6,7 @@ import font_family from './font_family.js'
 import typography from './typography.js'
 import spacing from './spacing.js'
 import timing from './timing.js'
-import class_ from './class.js'
+import _class from './class.js'
 import grid from './grid.js'
 import icons from './icons.js'
 import shape from './shape.js'
@@ -16,20 +16,20 @@ import media from './media.js'
 import cases from './cases.js'
 
 export default {
-  color,
-  gradient,
-  theme,
-  font,
-  font_family,
-  typography,
-  spacing,
-  timing,
-  class: class_,
-  grid,
-  icons,
-  shape,
-  reset,
-  animation,
-  media,
-  cases
+  COLOR: color,
+  GRADIENT: gradient,
+  THEME: theme,
+  FONT: font,
+  FONT_FAMILY: font_family,
+  TYPOGRAPHY: typography,
+  SPACING: spacing,
+  TIMING: timing,
+  CLASS: _class,
+  GRID: grid,
+  ICONS: icons,
+  SHAPE: shape,
+  RESET: reset,
+  ANIMATION: animation,
+  MEDIA: media,
+  CASES: cases,
 }

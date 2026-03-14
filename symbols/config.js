@@ -7,5 +7,5 @@ export default {
   useDefaultConfig: true,
   useDocumentTheme: true,
   verbose: false,
-  globalTheme: 'auto'
+  globalTheme: 'light'
 }

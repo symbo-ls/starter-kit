@@ -1,5 +1,7 @@
 {
-  "key": "projectName.symbo.ls",
-  "dir": "./symbols",
-  "bundler": "parcel"
+  "key": "childsafetynet.symbo.ls",
+  "version": "1.0.0",
+  "branch": "main",
+  "bundler": "parcel",
+  "brender": false
 }

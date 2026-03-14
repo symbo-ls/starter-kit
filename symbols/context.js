@@ -10,6 +10,7 @@ import files from './files/index.js'
 import sharedLibraries from './sharedLibraries.js'
 import config from './config.js'
 import envs from './envs.js'
+import translations from './designSystem/lang.js'
 
 export default {
   ...config,
@@ -23,5 +24,10 @@ export default {
   designSystem,
   files,
   sharedLibraries,
-  envs
+  envs,
+  polyglot: {
+    defaultLang: 'ka',
+    languages: ['ka', 'en'],
+    translations
+  }
 }
