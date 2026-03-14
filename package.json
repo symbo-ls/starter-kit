@@ -1,8 +1,14 @@
 {
   "private": true,
+<<<<<<< HEAD
   "name": "@symbo.ls/starter-kit-childsafetynet",
   "version": "1.0.0",
   "description": "Child Safety Net - Built with Symbols",
+=======
+  "name": "@symbo.ls/starter-kit",
+  "version": "3.7.3",
+  "description": "Example dev setup to use Symbols",
+>>>>>>> 1d85e8c121a27b7ed7ab8d33e1bdd90e703822d0
   "author": "symbo.ls",
   "scripts": {
     "start": "npx smbls start",
@@ -10,7 +16,7 @@
     "deploy": "npx smbls deploy"
   },
   "dependencies": {
-    "smbls": "^3.7.0"
+    "smbls": "^3.7.3"
   },
   "publishConfig": {
     "access": "restricted"
