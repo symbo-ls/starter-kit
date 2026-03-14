@@ -3,5 +3,6 @@
   "version": "1.0.0",
   "branch": "main",
   "bundler": "parcel",
-  "brender": true
+  "brender": true,
+  "useTemporaryProjectPlacement": true
 }
