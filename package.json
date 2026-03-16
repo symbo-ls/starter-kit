@@ -10,7 +10,7 @@
     "deploy": "npx smbls deploy"
   },
   "dependencies": {
-    "smbls": "^3.7.5"
+    "smbls": "^3.7.6"
   },
   "publishConfig": {
     "access": "restricted"
