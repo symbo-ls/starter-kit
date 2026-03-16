@@ -1,8 +1,9 @@
 {
-  "key": "childsafetynet.symbo.ls",
+  "owner": "tmr",
+  "key": "childsafetynet",
   "version": "1.0.0",
   "branch": "main",
   "bundler": "parcel",
   "brender": true,
-  "useTemporaryProjectPlacement": true
+  "useKV": true
 }
