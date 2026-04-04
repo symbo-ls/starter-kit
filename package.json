@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@symbo.ls/starter-kit",
-  "version": "3.8.9",
+  "version": "4.0.0",
   "description": "Example dev setup to use Symbols",
   "author": "symbo.ls",
   "repository": "https://github.com/symbo-ls/starter-kit",
@@ -11,7 +11,7 @@
     "deploy": "npx smbls deploy"
   },
   "dependencies": {
-    "smbls": "^3.8.9"
+    "smbls": "4.0.0"
   },
   "publishConfig": {
     "access": "restricted"
