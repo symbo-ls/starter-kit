@@ -105,7 +105,7 @@ Dev mode keeps current behavior — runtime merge on the fly via `prepareSharedL
 
 ## Shared Logic in smbls-utils
 
-`@symbo.ls/smbls-utils` (`smbls-utils/src/sharedLibraries.js`) exports:
+`@symbo.ls/utils` (`smbls-utils/src/sharedLibraries.js`) exports:
 - `normalizeLibraryKey(raw)` — key normalization (same logic as CLI)
 - `deepDefaults(target, source)` — non-destructive recursive merge
 - `mergeSharedLibraries(context, libraries)` — merge library data into context
