@@ -8,10 +8,10 @@
   "scripts": {
     "start": "bunx smbls start",
     "build": "bunx smbls build",
-    "deploy": "bunx smbls deploy"
+    "publish": "bunx smbls publish"
   },
   "dependencies": {
-    "smbls": "*"
+    "smbls": "4.0.0"
   },
   "publishConfig": {
     "access": "restricted"
