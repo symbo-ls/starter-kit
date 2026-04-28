@@ -2,7 +2,7 @@ import color from './color.js'
 import gradient from './gradient.js'
 import theme from './theme.js'
 import font from './font.js'
-import font_family from './font_family.js'
+import fontFamily from './fontFamily.js'
 import typography from './typography.js'
 import spacing from './spacing.js'
 import timing from './timing.js'
@@ -19,7 +19,7 @@ export default {
   gradient,
   theme,
   font,
-  font_family,
+  fontFamily,
   typography,
   spacing,
   timing,
