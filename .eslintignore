@@ -1,4 +1,4 @@
 dist/
 node_modules/
 .parcel-cache/
-.symbols/
+.symbols_local/
