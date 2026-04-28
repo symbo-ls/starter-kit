@@ -1,8 +1,11 @@
 export default {
-  Default: {
+  system: {
     isDefault: true,
     value: [
-      'San Francisco, Helvetica Neue, Helvetica, Arial',
+      '"San Francisco"',
+      '"Helvetica Neue"',
+      'Helvetica',
+      'Arial',
     ],
     type: 'sans-serif',
   },
