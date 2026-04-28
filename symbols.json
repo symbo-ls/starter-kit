@@ -1,5 +1,5 @@
 {
-  "owner": "system",
+  "owner": "community",
   "key": "projectName",
   "dir": "./symbols",
   "bundler": "parcel",
