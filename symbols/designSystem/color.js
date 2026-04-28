@@ -29,4 +29,5 @@ export default {
   ],
   codGray: '#171717',
   blue: '#0474f2',
+  surface: '#2e2e32',
 }
