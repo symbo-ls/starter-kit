@@ -8,7 +8,8 @@
   "scripts": {
     "start": "bunx smbls start",
     "build": "bunx smbls build",
-    "publish": "bunx smbls publish"
+    "publish": "bunx smbls publish",
+    "postinstall": "smbls fetch --scope libs --yes --quiet || true"
   },
   "dependencies": {
     "smbls": "^3.14.0"

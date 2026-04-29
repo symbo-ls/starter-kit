@@ -3,5 +3,7 @@
   "key": "projectName",
   "dir": "./symbols",
   "bundler": "parcel",
-  "sharedLibraries": ["system/default"]
+  "sharedLibraries": {
+    "system/default": { "version": "^3.14.0" }
+  }
 }
