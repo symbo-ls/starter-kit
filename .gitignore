@@ -40,3 +40,6 @@ node_modules
 .parcel-cache
 .cache
 dist
+
+.symbols_local
+.frank
