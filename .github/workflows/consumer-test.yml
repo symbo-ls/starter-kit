@@ -13,14 +13,15 @@
 # by "addressing the cause" — the failure is attributed to the SHA that
 # introduced it, not just shown abstractly somewhere.
 #
-# Required secrets:
-#   - NPM_TOKEN              — npmjs.org token with read on @symbo.ls
-#                              scope. Required because @symbo.ls/* are
-#                              restricted access on npmjs.org.
-#   - GITHUB_PACKAGES_TOKEN  — Classic PAT (read:packages + repo) with
-#                              SSO authorized for symbo-ls. Used both to
-#                              install @symbo-ls/* deps AND to write
-#                              Check Runs cross-repo via the Checks API.
+# Required secrets on this repo (or set at org level):
+#   - INFISICAL_CLIENT_ID / INFISICAL_CLIENT_SECRET — universal-auth
+#     machine identity for km.api.symbols.app. Tokens (NPM_TOKEN_PUBLISH
+#     for restricted-scope @symbo.ls/* installs, GITHUB_PACKAGES_TOKEN
+#     for cross-repo Check Run writes via the Checks API) are fetched
+#     from Infisical at runtime — no per-repo token juggling.
+#
+# Per-repo NPM_TOKEN / GITHUB_PACKAGES_TOKEN secrets are still
+# accepted as a fallback when Infisical creds aren't configured.
 
 name: Consumer test (upstream-bumped)
 
@@ -62,24 +63,65 @@ jobs:
         with:
           node-version: 20
 
-      - name: Configure dual-registry auth
+      - name: Fetch tokens from Infisical + write .npmrc
+        id: tokens
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
+          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
+          NPM_TOKEN_FALLBACK: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN_FALLBACK: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
         run: |
+          set -euo pipefail
+          NPM_TOKEN=""
+          GH_PKG_TOKEN=""
+
+          if [ -n "${INFISICAL_CLIENT_ID:-}" ] && [ -n "${INFISICAL_CLIENT_SECRET:-}" ]; then
+            curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo -E bash
+            sudo apt-get update && sudo apt-get install -y infisical
+            INFISICAL_TOKEN=$(infisical login \
+              --method=universal-auth \
+              --client-id="$INFISICAL_CLIENT_ID" \
+              --client-secret="$INFISICAL_CLIENT_SECRET" \
+              --domain="https://km.api.symbols.app/api" \
+              --plain --silent)
+            echo "::add-mask::$INFISICAL_TOKEN"
+
+            NPM_TOKEN=$(infisical secrets get NPM_TOKEN_PUBLISH \
+              --projectId=a95028f1-c89b-4d5e-87a2-d6badfb3ab4b \
+              --env=production \
+              --domain="https://km.api.symbols.app/api" \
+              --token="$INFISICAL_TOKEN" \
+              --plain 2>/dev/null || true)
+            GH_PKG_TOKEN=$(infisical secrets get GITHUB_PACKAGES_TOKEN \
+              --projectId=a95028f1-c89b-4d5e-87a2-d6badfb3ab4b \
+              --env=production \
+              --domain="https://km.api.symbols.app/api" \
+              --token="$INFISICAL_TOKEN" \
+              --plain 2>/dev/null || true)
+          fi
+
+          NPM_TOKEN="${NPM_TOKEN:-$NPM_TOKEN_FALLBACK}"
+          GH_PKG_TOKEN="${GH_PKG_TOKEN:-$GH_TOKEN_FALLBACK}"
+
+          [ -n "$NPM_TOKEN" ] && echo "::add-mask::$NPM_TOKEN"
+          [ -n "$GH_PKG_TOKEN" ] && echo "::add-mask::$GH_PKG_TOKEN"
+
+          # Stash GH token for later steps (Check Run API).
+          echo "gh_token=$GH_PKG_TOKEN" >> "$GITHUB_OUTPUT"
+
           NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
           {
             if [ -n "$NPM_TOKEN" ]; then
               echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN"
               echo "always-auth=true"
             else
-              echo "::warning::NPM_TOKEN not set — install of restricted @symbo.ls/* packages will 404." 1>&2
+              echo "::warning::No NPM_TOKEN (Infisical or repo secret) — install of restricted @symbo.ls/* packages will 404." 1>&2
             fi
-            if [ -n "$GH_TOKEN" ]; then
+            if [ -n "$GH_PKG_TOKEN" ]; then
               echo "@symbo-ls:registry=https://npm.pkg.github.com"
-              echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN"
+              echo "//npm.pkg.github.com/:_authToken=$GH_PKG_TOKEN"
             else
-              echo "::warning::GITHUB_PACKAGES_TOKEN not set — Check Run fan-back to source SHA will fail." 1>&2
+              echo "::warning::No GITHUB_PACKAGES_TOKEN — Check Run fan-back to source SHA will fail." 1>&2
             fi
           } >> "$NPMRC"
 
@@ -99,9 +141,9 @@ jobs:
 
       - name: Open Check Run on source repo
         id: open_source_check
-        if: env.GH_TOKEN != ''
+        if: steps.tokens.outputs.gh_token != ''
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          GH_TOKEN: ${{ steps.tokens.outputs.gh_token }}
           SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
           SOURCE_SHA: ${{ github.event.client_payload.source_sha }}
         run: |
@@ -143,7 +185,7 @@ jobs:
       - name: Conclude Check Run on source repo
         if: always() && steps.open_source_check.outputs.check_id != ''
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          GH_TOKEN: ${{ steps.tokens.outputs.gh_token }}
           SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
           CHECK_ID: ${{ steps.open_source_check.outputs.check_id }}
           TEST_STATUS: ${{ steps.tests.outputs.test_status }}
