@@ -1,0 +1,40 @@
+# Drop into <repo>/.github/workflows/notify-release.yml
+#
+# After source merges to main, dispatches a `source-changed` event to
+# release-manager. release-manager picks it up, runs auto-changeset
+# across all submodules, applies version bumps, builds, publishes (npm
+# + GH Packages), pushes per-submodule chore(release) commits, and
+# advances its own submodule pins.
+#
+# This replaces the per-repo Changesets release.yml — there is now a
+# single publishing point. Per-repo release.yml files should be deleted
+# (or converted to no-op stubs) to avoid double-publishing.
+#
+# Required secret on this repo: RELEASE_MANAGER_DISPATCH_TOKEN — a GitHub
+# PAT (or fine-grained token) with `repo` scope on symbo-ls/release-manager.
+
+name: Notify release-manager
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    if: github.event.head_commit.message != null && !startsWith(github.event.head_commit.message, 'chore(release)')
+    steps:
+      - name: Dispatch source-changed to release-manager
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.RELEASE_MANAGER_DISPATCH_TOKEN }}
+          repository: symbo-ls/release-manager
+          event-type: source-changed
+          client-payload: |
+            {
+              "repo": "${{ github.repository }}",
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}",
+              "actor": "${{ github.actor }}",
+              "message": ${{ toJSON(github.event.head_commit.message) }}
+            }
