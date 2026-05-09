@@ -23,8 +23,10 @@
 # add an actions/create-github-app-token step here. Optional.)
 #
 # Required secrets (set per-repo, same as test.yml):
-#   - NPM_TOKEN              — read-only, scoped to @symbo.ls
-#   - GITHUB_PACKAGES_TOKEN  — Classic PAT with read:packages only
+#   - NPM_TOKEN          — read-only, scoped to @symbo.ls
+#   - GH_PACKAGES_TOKEN  — Classic PAT with read:packages only
+#                          (named GH_ not GITHUB_ — GitHub blocks
+#                          GITHUB_-prefixed secret names)
 
 name: Consumer test (upstream-bumped)
 
@@ -77,7 +79,7 @@ jobs:
       - name: Configure dual-registry auth
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: |
           NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
           {

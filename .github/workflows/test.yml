@@ -19,11 +19,13 @@
 #                              on the @symbo.ls scope. @symbo.ls/* are
 #                              publishConfig.access: "restricted" so
 #                              installs need auth.
-#   - GITHUB_PACKAGES_TOKEN  — Classic PAT, scope: read:packages ONLY.
+#   - GH_PACKAGES_TOKEN       — Classic PAT, scope: read:packages ONLY.
 #                              No `repo`, no `write:packages`. SSO-
 #                              authorized for symbo-ls. Required only if
 #                              this repo consumes external @symbo-ls/*
-#                              deps from GH Packages.
+#                              deps from GH Packages. (Named GH_ rather
+#                              than GITHUB_ because GitHub blocks
+#                              GITHUB_-prefixed secret names.)
 
 name: Test
 
@@ -75,7 +77,7 @@ jobs:
       - name: Configure dual-registry auth
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: |
           # actions/setup-node points npm at a temp userconfig — write
           # there, not $HOME/.npmrc, otherwise npm won't read it.
