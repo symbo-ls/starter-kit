@@ -1,0 +1,176 @@
+# Drop into <repo>/.github/workflows/consumer-test.yml
+#
+# Cross-repo regression detector.
+#
+# Triggered by release-manager when it has just published a new version
+# of an upstream package this repo consumes. We install the new version,
+# re-run the test suite, and write a Check Run *both* on the source repo's
+# SHA (so the upstream author sees that their commit broke us) and on
+# this repo's HEAD (so the local team sees what's wrong).
+#
+# This is the half of the system that catches "smbls util change broke
+# server tests" failures. The Check Run fan-back is what the user means
+# by "addressing the cause" — the failure is attributed to the SHA that
+# introduced it, not just shown abstractly somewhere.
+#
+# Required secrets:
+#   - NPM_TOKEN              — npmjs.org token with read on @symbo.ls
+#                              scope. Required because @symbo.ls/* are
+#                              restricted access on npmjs.org.
+#   - GITHUB_PACKAGES_TOKEN  — Classic PAT (read:packages + repo) with
+#                              SSO authorized for symbo-ls. Used both to
+#                              install @symbo-ls/* deps AND to write
+#                              Check Runs cross-repo via the Checks API.
+
+name: Consumer test (upstream-bumped)
+
+on:
+  repository_dispatch:
+    types: [upstream-bumped]
+
+# A consumer-test fan-out can fire repeatedly during a release wave; only
+# the most recent dispatch's verdict is meaningful.
+concurrency:
+  group: consumer-test-${{ github.event.client_payload.source_repo }}
+  cancel-in-progress: true
+
+jobs:
+  consumer-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Echo dispatch payload
+        run: |
+          echo "Source repo:    ${{ github.event.client_payload.source_repo }}"
+          echo "Source SHA:     ${{ github.event.client_payload.source_sha }}"
+          echo "Bumped pkgs:    ${{ github.event.client_payload.bumped_packages }}"
+          echo "Bumped vers:    ${{ github.event.client_payload.bumped_versions }}"
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Configure dual-registry auth
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+        run: |
+          NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
+          {
+            if [ -n "$NPM_TOKEN" ]; then
+              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN"
+              echo "always-auth=true"
+            else
+              echo "::warning::NPM_TOKEN not set — install of restricted @symbo.ls/* packages will 404." 1>&2
+            fi
+            if [ -n "$GH_TOKEN" ]; then
+              echo "@symbo-ls:registry=https://npm.pkg.github.com"
+              echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN"
+            else
+              echo "::warning::GITHUB_PACKAGES_TOKEN not set — Check Run fan-back to source SHA will fail." 1>&2
+            fi
+          } >> "$NPMRC"
+
+      - name: Install (pulls newly published upstream versions)
+        run: |
+          # consumer-test deliberately ignores the lockfile because the
+          # whole point is to pick up the newly-published upstream version.
+          # We still use npm (not bun) for restricted-scope tarball-URL
+          # auth bypass — see test.yml comment.
+          if [ -f package-lock.json ]; then
+            # `npm install` (not ci) so deps re-resolve to latest matching
+            # the semver in package.json — that's the bumped version.
+            npm install --no-audit --ignore-scripts
+          else
+            bun install
+          fi
+
+      - name: Open Check Run on source repo
+        id: open_source_check
+        if: env.GH_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
+          SOURCE_SHA: ${{ github.event.client_payload.source_sha }}
+        run: |
+          # in_progress Check on the source SHA — we update its conclusion
+          # at the end based on test result.
+          RESPONSE=$(curl -sS -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$SOURCE_REPO/check-runs" \
+            -d "$(jq -n \
+              --arg name "consumer-test (${{ github.repository }})" \
+              --arg head_sha "$SOURCE_SHA" \
+              --arg details_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{name: $name, head_sha: $head_sha, status: "in_progress", details_url: $details_url}')")
+          CHECK_ID=$(echo "$RESPONSE" | jq -r '.id // empty')
+          if [ -z "$CHECK_ID" ]; then
+            echo "::warning::Could not open Check Run on $SOURCE_REPO@$SOURCE_SHA — token likely lacks 'repo' scope or SSO authorization"
+            echo "$RESPONSE" | head -20
+          fi
+          echo "check_id=$CHECK_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Run tests
+        id: tests
+        run: |
+          set +e
+          if [ -f "scripts/test.sh" ]; then
+            bash scripts/test.sh > test-output.log 2>&1
+          elif jq -e '.scripts.test' package.json > /dev/null; then
+            npm test > test-output.log 2>&1
+          else
+            echo "No tests configured" > test-output.log
+            exit 0
+          fi
+          STATUS=$?
+          tail -200 test-output.log
+          echo "test_status=$STATUS" >> "$GITHUB_OUTPUT"
+          exit 0  # don't fail the step; we report via Check Run
+
+      - name: Conclude Check Run on source repo
+        if: always() && steps.open_source_check.outputs.check_id != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
+          CHECK_ID: ${{ steps.open_source_check.outputs.check_id }}
+          TEST_STATUS: ${{ steps.tests.outputs.test_status }}
+        run: |
+          CONCLUSION="success"
+          TITLE="✓ ${{ github.repository }} tests passed against bumped deps"
+          if [ "$TEST_STATUS" != "0" ]; then
+            CONCLUSION="failure"
+            TITLE="✗ ${{ github.repository }} tests FAILED against bumped deps"
+          fi
+          # Truncate log to fit Checks API limit (65535 chars).
+          LOG=$(tail -c 60000 test-output.log 2>/dev/null || echo "")
+          curl -sS -X PATCH \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$SOURCE_REPO/check-runs/$CHECK_ID" \
+            -d "$(jq -n \
+              --arg conclusion "$CONCLUSION" \
+              --arg title "$TITLE" \
+              --arg summary "Bumped: ${{ github.event.client_payload.bumped_packages }}" \
+              --arg text "$LOG" \
+              '{status: "completed", conclusion: $conclusion, output: {title: $title, summary: $summary, text: $text}}')" \
+            > /dev/null
+
+      - name: Fail step if tests failed
+        if: steps.tests.outputs.test_status != '0'
+        run: |
+          echo "Consumer tests failed against bumped upstream deps."
+          echo "Check Run posted on ${{ github.event.client_payload.source_repo }}@${{ github.event.client_payload.source_sha }}"
+          exit 1

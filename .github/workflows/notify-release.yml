@@ -1,28 +1,31 @@
 # Drop into <repo>/.github/workflows/notify-release.yml
 #
-# After source merges to main, dispatches a `source-changed` event to
-# release-manager. release-manager picks it up, runs auto-changeset
-# across all submodules, applies version bumps, builds, publishes (npm
-# + GH Packages), pushes per-submodule chore(release) commits, and
-# advances its own submodule pins.
-#
-# This replaces the per-repo Changesets release.yml — there is now a
-# single publishing point. Per-repo release.yml files should be deleted
-# (or converted to no-op stubs) to avoid double-publishing.
+# Dispatches a `source-changed` event to release-manager AFTER the local
+# Test workflow has concluded successfully on a push to main. The
+# `workflow_run` trigger is the gate: if Test fails, this never runs,
+# the manager is never invoked, and the broken commit cannot publish.
 #
 # Required secret on this repo: RELEASE_MANAGER_DISPATCH_TOKEN — a GitHub
-# PAT (or fine-grained token) with `repo` scope on symbo-ls/release-manager.
+# Classic PAT with `repo` scope on symbo-ls/release-manager (SSO authorized).
 
 name: Notify release-manager
 
 on:
-  push:
+  workflow_run:
+    workflows: [Test]
+    types: [completed]
     branches: [main]
 
 jobs:
   dispatch:
     runs-on: ubuntu-latest
-    if: github.event.head_commit.message != null && !startsWith(github.event.head_commit.message, 'chore(release)')
+    # Skip when:
+    #  - the Test workflow itself failed (don't publish broken code)
+    #  - the head commit is a chore(release) bump (avoid republish loop)
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_commit.message != null &&
+      !startsWith(github.event.workflow_run.head_commit.message, 'chore(release)')
     steps:
       - name: Dispatch source-changed to release-manager
         uses: peter-evans/repository-dispatch@v3
@@ -33,8 +36,8 @@ jobs:
           client-payload: |
             {
               "repo": "${{ github.repository }}",
-              "ref": "${{ github.ref }}",
-              "sha": "${{ github.sha }}",
-              "actor": "${{ github.actor }}",
-              "message": ${{ toJSON(github.event.head_commit.message) }}
+              "ref": "${{ github.event.workflow_run.head_branch }}",
+              "sha": "${{ github.event.workflow_run.head_sha }}",
+              "actor": "${{ github.event.workflow_run.actor.login }}",
+              "message": ${{ toJSON(github.event.workflow_run.head_commit.message) }}
             }
