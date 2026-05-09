@@ -96,6 +96,14 @@ jobs:
           } >> "$NPMRC"
 
       - name: Install (pulls newly published upstream versions)
+        env:
+          # Cover all common env-var names so any project-local .npmrc
+          # using ${NPM_SECRET}, ${NODE_AUTH_TOKEN_NPM}, etc. resolves.
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_SECRET: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN_NPM: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: npm install --no-audit --ignore-scripts
 
       - name: Build workspace packages

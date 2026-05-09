@@ -96,14 +96,21 @@ jobs:
           } >> "$NPMRC"
 
       - name: Install
+        env:
+          # Some repos (workspace, others) have a project-local .npmrc
+          # that takes precedence over $HOME/.npmrc and uses different
+          # env-var names for the token. Export the value under every
+          # common name so any existing .npmrc convention resolves.
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_SECRET: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN_NPM: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
         run: |
           # Always use npm install. With package-lock.json present, npm
           # uses the lock's pinned tarball URLs and skips scope-metadata
           # lookups (auth-friendly). Without a lockfile, npm generates
           # one on the fly and still respects the .npmrc auth we wrote.
-          # bun install was less reliable on restricted scopes — the
-          # metadata lookup behavior differs and 404s hit consistently
-          # on lockfile-less repos.
           # --no-audit + --ignore-scripts keep it fast and side-effect-free.
           npm install --no-audit --ignore-scripts
 
