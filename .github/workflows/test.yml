@@ -25,5 +25,5 @@ concurrency:
 
 jobs:
   test:
-    uses: symbo-ls/release-manager/.github/workflows/test-reusable.yml@main
+    uses: symbo-ls/.github/.github/workflows/test-reusable.yml@main
     secrets: inherit
