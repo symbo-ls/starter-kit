@@ -96,14 +96,7 @@ jobs:
           } >> "$NPMRC"
 
       - name: Install (pulls newly published upstream versions)
-        run: |
-          # consumer-test deliberately ignores the lockfile because the
-          # whole point is to pick up the newly-published upstream version.
-          if [ -f package-lock.json ]; then
-            npm install --no-audit --ignore-scripts
-          else
-            bun install
-          fi
+        run: npm install --no-audit --ignore-scripts
 
       - name: Build workspace packages
         run: npm run build --workspaces --if-present 2>&1 | tail -100 || true

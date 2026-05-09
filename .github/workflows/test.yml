@@ -97,18 +97,15 @@ jobs:
 
       - name: Install
         run: |
-          # Prefer npm install when the repo ships a package-lock.json:
-          # npm uses the lock's pinned tarball URLs, skipping scope-
-          # metadata lookups; survives when a token momentarily lacks
-          # read on a scope. We use `install` (not `ci`) so a slightly
-          # stale lockfile doesn't fail the gate. --no-audit +
-          # --ignore-scripts keep it fast and side-effect-free.
-          # Falls back to bun for repos that ship bun.lock instead.
-          if [ -f package-lock.json ]; then
-            npm install --no-audit --ignore-scripts
-          else
-            bun install --frozen-lockfile || bun install
-          fi
+          # Always use npm install. With package-lock.json present, npm
+          # uses the lock's pinned tarball URLs and skips scope-metadata
+          # lookups (auth-friendly). Without a lockfile, npm generates
+          # one on the fly and still respects the .npmrc auth we wrote.
+          # bun install was less reliable on restricted scopes — the
+          # metadata lookup behavior differs and 404s hit consistently
+          # on lockfile-less repos.
+          # --no-audit + --ignore-scripts keep it fast and side-effect-free.
+          npm install --no-audit --ignore-scripts
 
       # --ignore-scripts above suppresses workspace-package `prepare`
       # hooks, so dist-only packages won't have built dist/ yet. Run a
