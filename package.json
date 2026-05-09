@@ -1,6 +1,5 @@
 {
-  "private": true,
-  "name": "@symbo.ls/starter-kit",
+  "name": "@symbo-ls/starter-kit",
   "version": "3.14.0",
   "description": "Example dev setup to use Symbols",
   "author": "symbo.ls",
@@ -15,6 +14,7 @@
     "smbls": "^3.14.0"
   },
   "publishConfig": {
-    "access": "restricted"
+    "access": "restricted",
+    "registry": "https://npm.pkg.github.com"
   }
 }
