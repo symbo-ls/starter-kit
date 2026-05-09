@@ -1,31 +1,15 @@
 # Drop into <repo>/.github/workflows/test.yml
 #
-# Per-repo CI gate. Runs on every push to main and on PRs. Native to
-# the repo so failures appear as Check Runs on the commit/PR — visible
-# to everyone working in this repo without needing access to release-
-# manager.
+# Thin wrapper that calls release-manager's reusable Test workflow.
+# All implementation lives in symbo-ls/release-manager — change there
+# once and every consumer's next push picks it up.
 #
-# This workflow is the GATE for notify-release.yml: only when this Test
-# workflow concludes `success` does notify-release dispatch the manager.
-# A failure here means the manager is never invoked, no publish happens,
-# and the broken commit cannot ripple into downstream consumers.
-#
-# Read-only secrets only — by design. Only release-manager has publish-
-# capable tokens. Consumer repos use minimal-privilege tokens so a
-# compromise of any one repo cannot publish to the org's npm scope.
-#
-# Required secrets (set per-repo via `gh secret set --repo symbo-ls/<repo>`):
-#   - NPM_TOKEN              — npmjs.com Granular Access Token, read-only
-#                              on the @symbo.ls scope. @symbo.ls/* are
-#                              publishConfig.access: "restricted" so
-#                              installs need auth.
-#   - GH_PACKAGES_TOKEN       — Classic PAT, scope: read:packages ONLY.
-#                              No `repo`, no `write:packages`. SSO-
-#                              authorized for symbo-ls. Required only if
-#                              this repo consumes external @symbo-ls/*
-#                              deps from GH Packages. (Named GH_ rather
-#                              than GITHUB_ because GitHub blocks
-#                              GITHUB_-prefixed secret names.)
+# Required secrets on this repo (read-only):
+#   - NPM_TOKEN          — npmjs Granular Access Token, read on @symbo.ls
+#   - GH_PACKAGES_TOKEN  — Classic PAT, read:packages only
+# Optional (for live API smoke tests like sdk):
+#   - INFISICAL_CLIENT_ID / INFISICAL_CLIENT_SECRET
+#   - INFISICAL_PROJECT_ID / INFISICAL_DOMAIN
 
 name: Test
 
@@ -35,100 +19,11 @@ on:
   pull_request:
     branches: [main]
 
-# Cancel an in-flight Test run when a new push lands on the same ref —
-# we only care about the latest commit's verdict.
 concurrency:
   group: test-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      # Reuse the same ~/.npm cache strategy as the existing Dev / deploy
-      # workflows. Tarball cache survives even if a referenced version
-      # was unpublished from the registry (which has bitten us before).
-      # Keyed by package.json content so any dep change busts the cache.
-      - name: Cache ~/.npm
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            npm-${{ runner.os }}-
-
-      - name: Configure dual-registry auth
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: |
-          # actions/setup-node points npm at a temp userconfig — write
-          # there, not $HOME/.npmrc, otherwise npm won't read it.
-          NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
-          {
-            if [ -n "$NPM_TOKEN" ]; then
-              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN"
-              echo "always-auth=true"
-            else
-              echo "::warning::NPM_TOKEN not set — install of restricted @symbo.ls/* packages will 404." 1>&2
-            fi
-            if [ -n "$GH_TOKEN" ]; then
-              echo "@symbo-ls:registry=https://npm.pkg.github.com"
-              echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN"
-            fi
-          } >> "$NPMRC"
-
-      - name: Install
-        env:
-          # Some repos (workspace, others) have a project-local .npmrc
-          # that takes precedence over $HOME/.npmrc and uses different
-          # env-var names for the token. Export the value under every
-          # common name so any existing .npmrc convention resolves.
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_SECRET: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN_NPM: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: |
-          # Always use npm install. With package-lock.json present, npm
-          # uses the lock's pinned tarball URLs and skips scope-metadata
-          # lookups (auth-friendly). Without a lockfile, npm generates
-          # one on the fly and still respects the .npmrc auth we wrote.
-          # --no-audit + --ignore-scripts keep it fast and side-effect-free.
-          npm install --no-audit --ignore-scripts
-
-      # --ignore-scripts above suppresses workspace-package `prepare`
-      # hooks, so dist-only packages won't have built dist/ yet. Run a
-      # generic build pass; --if-present skips packages without a build
-      # script. Tolerant of failures (`|| true`) — if a missing build
-      # output actually matters, the test step below will surface it.
-      - name: Build workspace packages
-        run: npm run build --workspaces --if-present 2>&1 | tail -100 || true
-
-      - name: Test
-        run: |
-          if [ -f "scripts/test.sh" ]; then
-            bash scripts/test.sh
-          elif jq -e '.scripts.test' package.json > /dev/null; then
-            npm test
-          else
-            echo "No tests configured — running install-only smoke test."
-            echo "(That's not nothing — install/resolution failures still gate publish.)"
-          fi
+    uses: symbo-ls/release-manager/.github/workflows/test-reusable.yml@main
+    secrets: inherit

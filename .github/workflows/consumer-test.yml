@@ -1,32 +1,8 @@
 # Drop into <repo>/.github/workflows/consumer-test.yml
 #
-# Cross-repo regression detector. Triggered by release-manager when it
-# has just published a new version of an upstream package this repo
-# consumes. We install the new version and re-run the test suite.
-#
-# Read-only secrets only — by design. Same token shape as test.yml.
-# Only release-manager has publish-capable tokens.
-#
-# What about the cross-repo Check Run fan-back to the source SHA?
-# Writing a Check Run on another repo's commit needs a token with
-# `repo` (Classic) or `Checks: write` on that repo. Read-only PATs
-# don't have it; we won't grant it on consumer repos because the
-# blast radius of a compromised consumer's secrets matters more
-# than fast attribution. If the upstream commit broke us, the
-# next chore(release): push to this repo will still fail this repo's
-# own test.yml — slower attribution but safe.
-#
-# (To restore Check Run fan-back: provision a GitHub App with
-# `Checks: Read+Write` on all repos, set its app id + private key
-# as ORG-level secrets. App tokens are short-lived (~1h) and useless
-# without the App registration itself, so org-shared is safe. Then
-# add an actions/create-github-app-token step here. Optional.)
-#
-# Required secrets (set per-repo, same as test.yml):
-#   - NPM_TOKEN          — read-only, scoped to @symbo.ls
-#   - GH_PACKAGES_TOKEN  — Classic PAT with read:packages only
-#                          (named GH_ not GITHUB_ — GitHub blocks
-#                          GITHUB_-prefixed secret names)
+# Thin wrapper that calls release-manager's reusable consumer-test
+# workflow. Triggered when manager publishes upstream packages this
+# repo consumes.
 
 name: Consumer test (upstream-bumped)
 
@@ -34,87 +10,11 @@ on:
   repository_dispatch:
     types: [upstream-bumped]
 
-# A consumer-test fan-out can fire repeatedly during a release wave; only
-# the most recent dispatch's verdict is meaningful.
 concurrency:
   group: consumer-test-${{ github.event.client_payload.source_repo }}
   cancel-in-progress: true
 
 jobs:
   consumer-test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    steps:
-      - name: Echo dispatch payload
-        run: |
-          echo "Source repo:    ${{ github.event.client_payload.source_repo }}"
-          echo "Source SHA:     ${{ github.event.client_payload.source_sha }}"
-          echo "Bumped pkgs:    ${{ github.event.client_payload.bumped_packages }}"
-          echo "Bumped vers:    ${{ github.event.client_payload.bumped_versions }}"
-
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Cache ~/.npm
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            npm-${{ runner.os }}-
-
-      - name: Configure dual-registry auth
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: |
-          NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
-          {
-            if [ -n "$NPM_TOKEN" ]; then
-              echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN"
-              echo "always-auth=true"
-            else
-              echo "::warning::NPM_TOKEN not set — install of restricted @symbo.ls/* packages will 404." 1>&2
-            fi
-            if [ -n "$GH_TOKEN" ]; then
-              echo "@symbo-ls:registry=https://npm.pkg.github.com"
-              echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN"
-            fi
-          } >> "$NPMRC"
-
-      - name: Install (pulls newly published upstream versions)
-        env:
-          # Cover all common env-var names so any project-local .npmrc
-          # using ${NPM_SECRET}, ${NODE_AUTH_TOKEN_NPM}, etc. resolves.
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_SECRET: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN_NPM: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: npm install --no-audit --ignore-scripts
-
-      - name: Build workspace packages
-        run: npm run build --workspaces --if-present 2>&1 | tail -100 || true
-
-      - name: Run tests
-        run: |
-          if [ -f "scripts/test.sh" ]; then
-            bash scripts/test.sh
-          elif jq -e '.scripts.test' package.json > /dev/null; then
-            npm test
-          else
-            echo "No tests configured."
-          fi
+    uses: symbo-ls/release-manager/.github/workflows/consumer-test-reusable.yml@main
+    secrets: inherit
