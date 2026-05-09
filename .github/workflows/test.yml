@@ -1,20 +1,29 @@
 # Drop into <repo>/.github/workflows/test.yml
 #
-# Per-repo CI gate. Runs on every push to main and on PRs. Native to the
-# repo so failures appear as Check Runs on the commit/PR — visible to
-# everyone working in this repo without needing access to release-manager.
+# Per-repo CI gate. Runs on every push to main and on PRs. Native to
+# the repo so failures appear as Check Runs on the commit/PR — visible
+# to everyone working in this repo without needing access to release-
+# manager.
 #
 # This workflow is the GATE for notify-release.yml: only when this Test
 # workflow concludes `success` does notify-release dispatch the manager.
 # A failure here means the manager is never invoked, no publish happens,
 # and the broken commit cannot ripple into downstream consumers.
 #
-# Required secrets on this repo (or set at org level):
-#   - INFISICAL_CLIENT_ID / INFISICAL_CLIENT_SECRET — universal-auth
-#     machine identity for km.api.symbols.app. Same identity that
-#     release-manager uses; this workflow uses it to fetch NPM_TOKEN +
-#     GITHUB_PACKAGES_TOKEN at runtime so token rotation is centralized
-#     in Infisical (no per-repo secret juggling).
+# Read-only secrets only — by design. Only release-manager has publish-
+# capable tokens. Consumer repos use minimal-privilege tokens so a
+# compromise of any one repo cannot publish to the org's npm scope.
+#
+# Required secrets (set per-repo via `gh secret set --repo symbo-ls/<repo>`):
+#   - NPM_TOKEN              — npmjs.com Granular Access Token, read-only
+#                              on the @symbo.ls scope. @symbo.ls/* are
+#                              publishConfig.access: "restricted" so
+#                              installs need auth.
+#   - GITHUB_PACKAGES_TOKEN  — Classic PAT, scope: read:packages ONLY.
+#                              No `repo`, no `write:packages`. SSO-
+#                              authorized for symbo-ls. Required only if
+#                              this repo consumes external @symbo-ls/*
+#                              deps from GH Packages.
 
 name: Test
 
@@ -63,52 +72,11 @@ jobs:
           restore-keys: |
             npm-${{ runner.os }}-
 
-      - name: Fetch tokens from Infisical + write .npmrc
+      - name: Configure dual-registry auth
         env:
-          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
-          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-          # Static-secret fallback. If Infisical creds aren't set on
-          # this repo, we fall back to the per-repo secrets — same shape
-          # as before, just no longer required when Infisical is wired up.
-          NPM_TOKEN_FALLBACK: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN_FALLBACK: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
         run: |
-          set -euo pipefail
-          NPM_TOKEN=""
-          GH_PKG_TOKEN=""
-
-          if [ -n "${INFISICAL_CLIENT_ID:-}" ] && [ -n "${INFISICAL_CLIENT_SECRET:-}" ]; then
-            curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo -E bash
-            sudo apt-get update && sudo apt-get install -y infisical
-            INFISICAL_TOKEN=$(infisical login \
-              --method=universal-auth \
-              --client-id="$INFISICAL_CLIENT_ID" \
-              --client-secret="$INFISICAL_CLIENT_SECRET" \
-              --domain="https://km.api.symbols.app/api" \
-              --plain --silent)
-            echo "::add-mask::$INFISICAL_TOKEN"
-
-            NPM_TOKEN=$(infisical secrets get NPM_TOKEN_PUBLISH \
-              --projectId=a95028f1-c89b-4d5e-87a2-d6badfb3ab4b \
-              --env=production \
-              --domain="https://km.api.symbols.app/api" \
-              --token="$INFISICAL_TOKEN" \
-              --plain 2>/dev/null || true)
-            GH_PKG_TOKEN=$(infisical secrets get GITHUB_PACKAGES_TOKEN \
-              --projectId=a95028f1-c89b-4d5e-87a2-d6badfb3ab4b \
-              --env=production \
-              --domain="https://km.api.symbols.app/api" \
-              --token="$INFISICAL_TOKEN" \
-              --plain 2>/dev/null || true)
-          fi
-
-          # Fall back to per-repo secrets if Infisical didn't yield a value.
-          NPM_TOKEN="${NPM_TOKEN:-$NPM_TOKEN_FALLBACK}"
-          GH_PKG_TOKEN="${GH_PKG_TOKEN:-$GH_TOKEN_FALLBACK}"
-
-          [ -n "$NPM_TOKEN" ] && echo "::add-mask::$NPM_TOKEN"
-          [ -n "$GH_PKG_TOKEN" ] && echo "::add-mask::$GH_PKG_TOKEN"
-
           # actions/setup-node points npm at a temp userconfig — write
           # there, not $HOME/.npmrc, otherwise npm won't read it.
           NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
@@ -117,25 +85,23 @@ jobs:
               echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN"
               echo "always-auth=true"
             else
-              echo "::warning::No NPM_TOKEN (Infisical or repo secret) — install of restricted @symbo.ls/* packages will 404." 1>&2
+              echo "::warning::NPM_TOKEN not set — install of restricted @symbo.ls/* packages will 404." 1>&2
             fi
-            if [ -n "$GH_PKG_TOKEN" ]; then
+            if [ -n "$GH_TOKEN" ]; then
               echo "@symbo-ls:registry=https://npm.pkg.github.com"
-              echo "//npm.pkg.github.com/:_authToken=$GH_PKG_TOKEN"
+              echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN"
             fi
           } >> "$NPMRC"
 
       - name: Install
         run: |
           # Prefer npm install when the repo ships a package-lock.json:
-          #   - npm uses the lock's pinned tarball URLs, skipping scope-
-          #     metadata lookups; that avoids 404s on restricted scopes
-          #     like @symbo.ls/* when NPM_TOKEN with read access isn't set.
-          #   - we use `install` (not `ci`) so a slightly stale lockfile
-          #     doesn't fail the gate — same pattern as existing per-repo
-          #     deploy workflows. --no-audit + --ignore-scripts keep
-          #     this fast and side-effect-free.
-          # Falls back to bun install for repos that ship bun.lock instead.
+          # npm uses the lock's pinned tarball URLs, skipping scope-
+          # metadata lookups; survives when a token momentarily lacks
+          # read on a scope. We use `install` (not `ci`) so a slightly
+          # stale lockfile doesn't fail the gate. --no-audit +
+          # --ignore-scripts keep it fast and side-effect-free.
+          # Falls back to bun for repos that ship bun.lock instead.
           if [ -f package-lock.json ]; then
             npm install --no-audit --ignore-scripts
           else

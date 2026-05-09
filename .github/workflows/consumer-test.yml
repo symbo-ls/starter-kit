@@ -1,27 +1,30 @@
 # Drop into <repo>/.github/workflows/consumer-test.yml
 #
-# Cross-repo regression detector.
+# Cross-repo regression detector. Triggered by release-manager when it
+# has just published a new version of an upstream package this repo
+# consumes. We install the new version and re-run the test suite.
 #
-# Triggered by release-manager when it has just published a new version
-# of an upstream package this repo consumes. We install the new version,
-# re-run the test suite, and write a Check Run *both* on the source repo's
-# SHA (so the upstream author sees that their commit broke us) and on
-# this repo's HEAD (so the local team sees what's wrong).
+# Read-only secrets only — by design. Same token shape as test.yml.
+# Only release-manager has publish-capable tokens.
 #
-# This is the half of the system that catches "smbls util change broke
-# server tests" failures. The Check Run fan-back is what the user means
-# by "addressing the cause" — the failure is attributed to the SHA that
-# introduced it, not just shown abstractly somewhere.
+# What about the cross-repo Check Run fan-back to the source SHA?
+# Writing a Check Run on another repo's commit needs a token with
+# `repo` (Classic) or `Checks: write` on that repo. Read-only PATs
+# don't have it; we won't grant it on consumer repos because the
+# blast radius of a compromised consumer's secrets matters more
+# than fast attribution. If the upstream commit broke us, the
+# next chore(release): push to this repo will still fail this repo's
+# own test.yml — slower attribution but safe.
 #
-# Required secrets on this repo (or set at org level):
-#   - INFISICAL_CLIENT_ID / INFISICAL_CLIENT_SECRET — universal-auth
-#     machine identity for km.api.symbols.app. Tokens (NPM_TOKEN_PUBLISH
-#     for restricted-scope @symbo.ls/* installs, GITHUB_PACKAGES_TOKEN
-#     for cross-repo Check Run writes via the Checks API) are fetched
-#     from Infisical at runtime — no per-repo token juggling.
+# (To restore Check Run fan-back: provision a GitHub App with
+# `Checks: Read+Write` on all repos, set its app id + private key
+# as ORG-level secrets. App tokens are short-lived (~1h) and useless
+# without the App registration itself, so org-shared is safe. Then
+# add an actions/create-github-app-token step here. Optional.)
 #
-# Per-repo NPM_TOKEN / GITHUB_PACKAGES_TOKEN secrets are still
-# accepted as a fallback when Infisical creds aren't configured.
+# Required secrets (set per-repo, same as test.yml):
+#   - NPM_TOKEN              — read-only, scoped to @symbo.ls
+#   - GITHUB_PACKAGES_TOKEN  — Classic PAT with read:packages only
 
 name: Consumer test (upstream-bumped)
 
@@ -63,65 +66,30 @@ jobs:
         with:
           node-version: 20
 
-      - name: Fetch tokens from Infisical + write .npmrc
-        id: tokens
+      - name: Cache ~/.npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: Configure dual-registry auth
         env:
-          INFISICAL_CLIENT_ID: ${{ secrets.INFISICAL_CLIENT_ID }}
-          INFISICAL_CLIENT_SECRET: ${{ secrets.INFISICAL_CLIENT_SECRET }}
-          NPM_TOKEN_FALLBACK: ${{ secrets.NPM_TOKEN }}
-          GH_TOKEN_FALLBACK: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN }}
         run: |
-          set -euo pipefail
-          NPM_TOKEN=""
-          GH_PKG_TOKEN=""
-
-          if [ -n "${INFISICAL_CLIENT_ID:-}" ] && [ -n "${INFISICAL_CLIENT_SECRET:-}" ]; then
-            curl -1sLf 'https://dl.cloudsmith.io/public/infisical/infisical-cli/setup.deb.sh' | sudo -E bash
-            sudo apt-get update && sudo apt-get install -y infisical
-            INFISICAL_TOKEN=$(infisical login \
-              --method=universal-auth \
-              --client-id="$INFISICAL_CLIENT_ID" \
-              --client-secret="$INFISICAL_CLIENT_SECRET" \
-              --domain="https://km.api.symbols.app/api" \
-              --plain --silent)
-            echo "::add-mask::$INFISICAL_TOKEN"
-
-            NPM_TOKEN=$(infisical secrets get NPM_TOKEN_PUBLISH \
-              --projectId=a95028f1-c89b-4d5e-87a2-d6badfb3ab4b \
-              --env=production \
-              --domain="https://km.api.symbols.app/api" \
-              --token="$INFISICAL_TOKEN" \
-              --plain 2>/dev/null || true)
-            GH_PKG_TOKEN=$(infisical secrets get GITHUB_PACKAGES_TOKEN \
-              --projectId=a95028f1-c89b-4d5e-87a2-d6badfb3ab4b \
-              --env=production \
-              --domain="https://km.api.symbols.app/api" \
-              --token="$INFISICAL_TOKEN" \
-              --plain 2>/dev/null || true)
-          fi
-
-          NPM_TOKEN="${NPM_TOKEN:-$NPM_TOKEN_FALLBACK}"
-          GH_PKG_TOKEN="${GH_PKG_TOKEN:-$GH_TOKEN_FALLBACK}"
-
-          [ -n "$NPM_TOKEN" ] && echo "::add-mask::$NPM_TOKEN"
-          [ -n "$GH_PKG_TOKEN" ] && echo "::add-mask::$GH_PKG_TOKEN"
-
-          # Stash GH token for later steps (Check Run API).
-          echo "gh_token=$GH_PKG_TOKEN" >> "$GITHUB_OUTPUT"
-
           NPMRC="${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
           {
             if [ -n "$NPM_TOKEN" ]; then
               echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN"
               echo "always-auth=true"
             else
-              echo "::warning::No NPM_TOKEN (Infisical or repo secret) — install of restricted @symbo.ls/* packages will 404." 1>&2
+              echo "::warning::NPM_TOKEN not set — install of restricted @symbo.ls/* packages will 404." 1>&2
             fi
-            if [ -n "$GH_PKG_TOKEN" ]; then
+            if [ -n "$GH_TOKEN" ]; then
               echo "@symbo-ls:registry=https://npm.pkg.github.com"
-              echo "//npm.pkg.github.com/:_authToken=$GH_PKG_TOKEN"
-            else
-              echo "::warning::No GITHUB_PACKAGES_TOKEN — Check Run fan-back to source SHA will fail." 1>&2
+              echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN"
             fi
           } >> "$NPMRC"
 
@@ -129,90 +97,21 @@ jobs:
         run: |
           # consumer-test deliberately ignores the lockfile because the
           # whole point is to pick up the newly-published upstream version.
-          # We still use npm (not bun) for restricted-scope tarball-URL
-          # auth bypass — see test.yml comment.
           if [ -f package-lock.json ]; then
-            # `npm install` (not ci) so deps re-resolve to latest matching
-            # the semver in package.json — that's the bumped version.
             npm install --no-audit --ignore-scripts
           else
             bun install
           fi
 
-      - name: Open Check Run on source repo
-        id: open_source_check
-        if: steps.tokens.outputs.gh_token != ''
-        env:
-          GH_TOKEN: ${{ steps.tokens.outputs.gh_token }}
-          SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
-          SOURCE_SHA: ${{ github.event.client_payload.source_sha }}
-        run: |
-          # in_progress Check on the source SHA — we update its conclusion
-          # at the end based on test result.
-          RESPONSE=$(curl -sS -X POST \
-            -H "Authorization: token $GH_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/$SOURCE_REPO/check-runs" \
-            -d "$(jq -n \
-              --arg name "consumer-test (${{ github.repository }})" \
-              --arg head_sha "$SOURCE_SHA" \
-              --arg details_url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-              '{name: $name, head_sha: $head_sha, status: "in_progress", details_url: $details_url}')")
-          CHECK_ID=$(echo "$RESPONSE" | jq -r '.id // empty')
-          if [ -z "$CHECK_ID" ]; then
-            echo "::warning::Could not open Check Run on $SOURCE_REPO@$SOURCE_SHA — token likely lacks 'repo' scope or SSO authorization"
-            echo "$RESPONSE" | head -20
-          fi
-          echo "check_id=$CHECK_ID" >> "$GITHUB_OUTPUT"
+      - name: Build workspace packages
+        run: npm run build --workspaces --if-present 2>&1 | tail -100 || true
 
       - name: Run tests
-        id: tests
         run: |
-          set +e
           if [ -f "scripts/test.sh" ]; then
-            bash scripts/test.sh > test-output.log 2>&1
+            bash scripts/test.sh
           elif jq -e '.scripts.test' package.json > /dev/null; then
-            npm test > test-output.log 2>&1
+            npm test
           else
-            echo "No tests configured" > test-output.log
-            exit 0
+            echo "No tests configured."
           fi
-          STATUS=$?
-          tail -200 test-output.log
-          echo "test_status=$STATUS" >> "$GITHUB_OUTPUT"
-          exit 0  # don't fail the step; we report via Check Run
-
-      - name: Conclude Check Run on source repo
-        if: always() && steps.open_source_check.outputs.check_id != ''
-        env:
-          GH_TOKEN: ${{ steps.tokens.outputs.gh_token }}
-          SOURCE_REPO: ${{ github.event.client_payload.source_repo }}
-          CHECK_ID: ${{ steps.open_source_check.outputs.check_id }}
-          TEST_STATUS: ${{ steps.tests.outputs.test_status }}
-        run: |
-          CONCLUSION="success"
-          TITLE="✓ ${{ github.repository }} tests passed against bumped deps"
-          if [ "$TEST_STATUS" != "0" ]; then
-            CONCLUSION="failure"
-            TITLE="✗ ${{ github.repository }} tests FAILED against bumped deps"
-          fi
-          # Truncate log to fit Checks API limit (65535 chars).
-          LOG=$(tail -c 60000 test-output.log 2>/dev/null || echo "")
-          curl -sS -X PATCH \
-            -H "Authorization: token $GH_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/$SOURCE_REPO/check-runs/$CHECK_ID" \
-            -d "$(jq -n \
-              --arg conclusion "$CONCLUSION" \
-              --arg title "$TITLE" \
-              --arg summary "Bumped: ${{ github.event.client_payload.bumped_packages }}" \
-              --arg text "$LOG" \
-              '{status: "completed", conclusion: $conclusion, output: {title: $title, summary: $summary, text: $text}}')" \
-            > /dev/null
-
-      - name: Fail step if tests failed
-        if: steps.tests.outputs.test_status != '0'
-        run: |
-          echo "Consumer tests failed against bumped upstream deps."
-          echo "Check Run posted on ${{ github.event.client_payload.source_repo }}@${{ github.event.client_payload.source_sha }}"
-          exit 1
