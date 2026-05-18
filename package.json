@@ -1,6 +1,6 @@
 {
   "name": "@symbo-ls/starter-kit",
-  "version": "3.14.101",
+  "version": "3.14.102",
   "private": true,
   "description": "Example dev setup to use Symbols",
   "author": "symbo.ls",
@@ -12,7 +12,7 @@
     "postinstall": "smbls fetch --scope libs --yes --quiet || true"
   },
   "dependencies": {
-    "smbls": "^3.14.101"
+    "smbls": "^3.14.102"
   },
   "publishConfig": {
     "access": "restricted",
