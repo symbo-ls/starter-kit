@@ -1,5 +1,11 @@
 # @symbo-ls/starter-kit
 
+## 3.14.100
+
+### Patch Changes
+
+- smbls@3.14.100
+
 ## 3.14.4
 
 ### Patch Changes
