@@ -6,6 +6,8 @@
   "author": "symbo.ls",
   "repository": "https://github.com/symbo-ls/starter-kit",
   "scripts": {
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint .",
+    "lint:fix": "ESLINT_USE_FLAT_CONFIG=true eslint . --fix",
     "start": "bunx smbls start",
     "build": "bunx smbls build",
     "publish": "bunx smbls publish",

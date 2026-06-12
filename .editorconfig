@@ -1,0 +1,18 @@
+# EditorConfig — the lowest-common-denominator style contract that EVERY
+# editor honors natively or via a first-party plugin (VS Code, JetBrains,
+# Zed, Sublime, vim, helix). Prettier reads it too (indent/eol/charset),
+# so editor defaults and the formatter can't drift apart.
+# https://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+[*.md]
+# Trailing double-space is meaningful markdown (hard line break).
+trim_trailing_whitespace = false
