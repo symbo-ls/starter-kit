@@ -30,7 +30,10 @@ jobs:
       - name: Dispatch source-changed to release-manager
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.RELEASE_MANAGER_DISPATCH_TOKEN }}
+          # RELEASE_PAT is the canonical single-name secret; the `||` fallback
+          # is temporary until the old RELEASE_MANAGER_DISPATCH_TOKEN secret
+          # is deleted from this repo.
+          token: ${{ secrets.RELEASE_PAT || secrets.RELEASE_MANAGER_DISPATCH_TOKEN }}
           repository: symbo-ls/release-manager
           event-type: source-changed
           client-payload: |
