@@ -5,8 +5,9 @@
 # `workflow_run` trigger is the gate: if Test fails, this never runs,
 # the manager is never invoked, and the broken commit cannot publish.
 #
-# Required secret on this repo: RELEASE_MANAGER_DISPATCH_TOKEN — a GitHub
-# Classic PAT with `repo` scope on symbo-ls/release-manager (SSO authorized).
+# Required secret on this repo: RELEASE_PAT — a GitHub Classic PAT with
+# `repo` scope on symbo-ls/release-manager (SSO authorized). This is the
+# org's single canonical secret name for this credential.
 
 name: Notify release-manager
 
@@ -30,10 +31,9 @@ jobs:
       - name: Dispatch source-changed to release-manager
         uses: peter-evans/repository-dispatch@v3
         with:
-          # RELEASE_PAT is the canonical single-name secret; the `||` fallback
-          # is temporary until the old RELEASE_MANAGER_DISPATCH_TOKEN secret
-          # is deleted from this repo.
-          token: ${{ secrets.RELEASE_PAT || secrets.RELEASE_MANAGER_DISPATCH_TOKEN }}
+          # RELEASE_PAT is the org's single canonical secret name for this
+          # credential.
+          token: ${{ secrets.RELEASE_PAT }}
           repository: symbo-ls/release-manager
           event-type: source-changed
           client-payload: |
